@@ -3,26 +3,34 @@ package models;
 public class User {
     private int id;
     private String name;
-    private String surname;
-    private boolean gender;
+    private String email;
+    private String phoneNumber;
+    private String password;
+    private String role;
 
     public User() {
-
     }
 
-    public User(String name, String surname, boolean gender) {
-        setName(name);
-        setSurname(surname);
-        setGender(gender);
+    public User(String name, String email, String phoneNumber, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.role = role;
     }
 
-    public User(int id, String name, String surname, boolean gender) {
-        this(name, surname, gender);
+    public User(int id, String name, String email, String phoneNumber, String password, String role) {
+        this(name, email, phoneNumber, password, role);
         this.id = id;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -33,20 +41,36 @@ public class User {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getEmail() {
+        return email;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public boolean getGender() {
-        return gender;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -54,9 +78,10 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender=" + gender +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
-
 }
