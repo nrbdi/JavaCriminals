@@ -24,7 +24,6 @@ public class User {
         this.id = id;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
