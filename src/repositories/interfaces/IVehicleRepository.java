@@ -10,4 +10,6 @@ public interface IVehicleRepository {
     List<Vehicle> getVehiclesByBrand(String brand);
     Vehicle getVehicleById(int id);
     boolean updateVehicleStatus(int id, String status);
+
+    boolean createVehicle(Vehicle vehicle);
 }

@@ -99,6 +99,11 @@ public class VehicleRepository implements IVehicleRepository {
         return false;
     }
 
+    @Override
+    public boolean createVehicle(Vehicle vehicle) {
+        return false;
+    }
+
     private Vehicle mapVehicle(ResultSet rs) throws SQLException {
         return new Vehicle(
                 rs.getInt("id"),

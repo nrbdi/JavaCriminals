@@ -1,27 +1,35 @@
 import controllers.UserController;
 import controllers.VehicleController;
+import controllers.CharacteristicsController;
 import controllers.interfaces.IUserController;
 import controllers.interfaces.IVehicleController;
+import controllers.interfaces.ICharacteristicsController;
 import data.PostgresDB;
 import data.interfaces.IDB;
 import repositories.UserRepository;
 import repositories.VehicleRepository;
+import repositories.CharacteristicsRepository;
 import repositories.interfaces.IUserRepository;
 import repositories.interfaces.IVehicleRepository;
+import repositories.interfaces.ICharacteristicsRepository;
 
 public class Main {
     public static void main(String[] args) {
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5433", "postgres", "1315162827", "Sale");
+        try {
+            IDB db = new PostgresDB("jdbc:postgresql://localhost:5433", "postgres", "1315162827", "Sale");
 
-        IUserRepository user_repo = new UserRepository(db);
-        IVehicleRepository vehicle_repo = new VehicleRepository(db);
+            IUserRepository userRepo = new UserRepository(db);
+            IVehicleRepository vehicleRepo = new VehicleRepository(db);
+            ICharacteristicsRepository characteristicsRepo = new CharacteristicsRepository(db);
 
-        IUserController user_controller = new UserController(user_repo);
-        IVehicleController vehicle_controller = new VehicleController(vehicle_repo);
+            IUserController userController = new UserController(userRepo);
+            IVehicleController vehicleController = new VehicleController(vehicleRepo);
+            ICharacteristicsController characteristicsController = new CharacteristicsController(characteristicsRepo);
 
-        MyApplication app = new MyApplication(user_controller, vehicle_controller);
-        app.start();
-
-        db.close();
+            MyApplication app = new MyApplication(userController, vehicleController, characteristicsController);
+            app.start();
+        } catch (Exception e) {
+            System.out.println("Failed to connect to PostgreSQL database: " + e.getMessage());
+        }
     }
 }

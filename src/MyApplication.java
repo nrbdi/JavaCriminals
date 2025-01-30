@@ -1,119 +1,69 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import controllers.interfaces.IUserController;
 import controllers.interfaces.IVehicleController;
+import controllers.interfaces.ICharacteristicsController;
 
-public class MyApplication {
+public class MyApplication{
     private final IUserController userController;
     private final IVehicleController vehicleController;
+    private final ICharacteristicsController characteristicsController;
     private final Scanner scanner = new Scanner(System.in);
     private boolean isLoggedIn = false; // Флаг авторизации
 
-    public MyApplication(IUserController userController, IVehicleController vehicleController) {
+    public MyApplication(IUserController userController, IVehicleController vehicleController, ICharacteristicsController characteristicsController) {
         this.userController = userController;
         this.vehicleController = vehicleController;
+        this.characteristicsController = characteristicsController;
     }
 
     public void start() {
         while (true) {
-            showMainMenu();
-            try {
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Очищаем буфер
-                if (!isLoggedIn) { // Действия до входа в аккаунт
-                    switch (choice) {
-                        case 1 -> createUserMenu();
-                        case 2 -> updateUserMenu();
-                        case 3 -> getUserByIdMenu();
-                        case 4 -> getAllUsersMenu();
-                        case 5 -> loginUserMenu();
-                        case 0 -> {
-                            System.out.println("Программа завершена.");
-                            return;
-                        }
-                        default -> System.out.println("Выберите действие от 0 до 5.");
-                    }
-                } else { // Действия после входа в аккаунт
-                    switch (choice) {
-                        case 1 -> showVehicleCatalog();
-                        case 2 -> {
-                            System.out.println("Вы вышли из аккаунта. Программа завершена.");
-                            return;
-                        }
-                        default -> System.out.println("Выберите действие от 1 до 2.");
-                    }
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Ошибка: введите число.");
-                scanner.nextLine(); // Сбрасываем неправильный ввод
-            } catch (Exception e) {
-                System.out.println("Ошибка: " + e.getMessage());
+            if (!isLoggedIn) {
+                showLoginMenu();
+            } else {
+                showMainMenu();
             }
+        }
+    }
+
+    private void showLoginMenu() {
+        System.out.println("\nДобро пожаловать в User Management Application!");
+        System.out.println("1. Добавить нового пользователя");
+        System.out.println("2. Обновить существующего пользователя");
+        System.out.println("3. Получить данные пользователя по ID");
+        System.out.println("4. Показать всех пользователей");
+        System.out.println("5. Войти в аккаунт");
+        System.out.println("0. Выйти");
+        System.out.print("Введите номер действия: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (choice) {
+            case 5 -> loginUserMenu();
+            case 0 -> {
+                System.out.println("Программа завершена.");
+                System.exit(0);
+            }
+            default -> System.out.println("Выберите действие от 0 до 5.");
         }
     }
 
     private void showMainMenu() {
         System.out.println("\nДобро пожаловать в User Management Application!");
-        if (isLoggedIn) { // Меню для авторизованного пользователя
-            System.out.println("Выберите действие:");
-            System.out.println("1. Каталог машин");
-            System.out.println("2. Выйти");
-        } else { // Меню для неавторизованного пользователя
-            System.out.println("Выберите действие:");
-            System.out.println("1. Добавить нового пользователя");
-            System.out.println("2. Обновить существующего пользователя");
-            System.out.println("3. Получить данные пользователя по ID");
-            System.out.println("4. Показать всех пользователей");
-            System.out.println("5. Войти в аккаунт");
-            System.out.println("0. Выйти");
-        }
+        System.out.println("1. Каталог машин");
+        System.out.println("2. Выйти");
         System.out.print("Введите номер действия: ");
-    }
+        int choice = scanner.nextInt();
+        scanner.nextLine();
 
-    private void createUserMenu() {
-        System.out.println("Введите имя пользователя:");
-        String name = scanner.nextLine();
-        System.out.println("Введите email пользователя:");
-        String email = scanner.nextLine();
-        System.out.println("Введите номер телефона пользователя:");
-        String phoneNumber = scanner.nextLine();
-        System.out.println("Введите пароль пользователя:");
-        String password = scanner.nextLine();
-        System.out.println("Введите роль пользователя (client/admin):");
-        String role = scanner.nextLine();
-
-        String response = userController.createUser(name, email, phoneNumber, password, role);
-        System.out.println(response);
-    }
-
-    private void updateUserMenu() {
-        System.out.println("Введите имя пользователя для обновления:");
-        String name = scanner.nextLine();
-        System.out.println("Введите новый email (оставьте пустым для сохранения текущего):");
-        String email = scanner.nextLine();
-        System.out.println("Введите новый номер телефона (оставьте пустым для сохранения текущего):");
-        String phoneNumber = scanner.nextLine();
-        System.out.println("Введите новый пароль (оставьте пустым для сохранения текущего):");
-        String password = scanner.nextLine();
-        System.out.println("Введите новую роль (оставьте пустым для сохранения текущей):");
-        String role = scanner.nextLine();
-
-        String response = userController.updateUser(name, email, phoneNumber, password, role);
-        System.out.println(response);
-    }
-
-    private void getUserByIdMenu() {
-        System.out.println("Введите ID пользователя:");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Очищаем буфер
-
-        String response = userController.getUserById(id);
-        System.out.println(response);
-    }
-
-    private void getAllUsersMenu() {
-        String response = userController.getAllUsers();
-        System.out.println(response);
+        switch (choice) {
+            case 1 -> showVehicleCatalog();
+            case 2 -> {
+                isLoggedIn = false; // Выход из аккаунта
+                System.out.println("Вы вышли из аккаунта.");
+            }
+            default -> System.out.println("Выберите действие от 1 до 2.");
+        }
     }
 
     private void loginUserMenu() {
@@ -140,23 +90,60 @@ public class MyApplication {
             System.out.print("Выберите опцию: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очищаем буфер
+            scanner.nextLine();
             switch (choice) {
-                case 1 -> System.out.println(vehicleController.getAllVehicles());
+                case 1 -> {
+                    String allVehicles = vehicleController.getAllVehicles();
+                    System.out.println(allVehicles);
+                    showVehicleDetailsMenu();
+                }
                 case 2 -> {
-                    System.out.print("Введите тип машин (Crossover, Sedan, SUV): ");
+                    System.out.print("Введите тип машин ( Crossover, Sedan, SUV): ");
                     String type = scanner.nextLine();
-                    System.out.println(vehicleController.getVehiclesByType(type));
+                    String vehiclesByType = vehicleController.getVehiclesByType(type);
+                    System.out.println(vehiclesByType);
+                    showVehicleDetailsMenu();
                 }
                 case 3 -> {
-                    System.out.print("Введите марку машин (Kia, Toyota, BMW, Mercedes, Hyundai: ");
+                    System.out.print("Введите марку машин ( Kia, Hyundai, Mercedes, Toyota, BMW): ");
                     String brand = scanner.nextLine();
-                    System.out.println(vehicleController.getVehiclesByBrand(brand));
+                    String vehiclesByBrand = vehicleController.getVehiclesByBrand(brand);
+                    System.out.println(vehiclesByBrand);
+                    showVehicleDetailsMenu();
                 }
                 case 0 -> {
-                    return; // Возврат в главное меню
+                    return;
                 }
                 default -> System.out.println("Выберите действие от 0 до 3.");
+            }
+        }
+    }
+
+    private void showVehicleDetailsMenu() {
+        while (true) {
+            System.out.println("\n1. Подробные характеристики машины");
+            System.out.println("2. Назад");
+            System.out.print("Выберите опцию: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Введите ID машины: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    String details = characteristicsController.getCharacteristicsByVehicleId(id);
+                    if (details == null || details.isEmpty()) {
+                        System.out.println("Характеристики машины с ID " + id + " не найдены.");
+                    } else {
+                        System.out.println("Характеристики машины:");
+                        System.out.println(details);
+                    }
+                }
+                case 2 -> {
+                    return;
+                }
+                default -> System.out.println("Выберите действие от 1 до 2.");
             }
         }
     }

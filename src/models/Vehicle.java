@@ -19,7 +19,9 @@ public class Vehicle {
         this.status = status;
     }
 
-    // Getters and Setters
+    public Vehicle(String brand, String model, String vehicleType, double price, int releaseYear, String status) {
+    }
+
     public int getId() {
         return id;
     }
