@@ -33,7 +33,7 @@ Implements IUserRepository.
 Connects to PostgresDB and executes SQL queries related to users.
 
 Controller Interfaces and Implementations:
-5. IVehicleController
+1. IVehicleController
 Interface defining methods for handling vehicle-related operations from the user interface.
 Methods:
 getAllVehicles()
@@ -41,7 +41,7 @@ getVehiclesByType(String type)
 getVehiclesByBrand(String brand)
 getVehicleById(int id)
 updateVehicleStatus(int id, String status)
-6. IUserController
+2. IUserController
 Interface defining methods for handling user-related operations.
 Methods:
 createUser(User user)
@@ -49,10 +49,10 @@ updateUser(User user)
 getUserById(int id)
 loginUser(String email, String password)
 getAllUsers()
-7. VehicleController
+3. VehicleController
 Implements IVehicleController.
 Uses IVehicleRepository to interact with the database and process vehicle-related requests.
-8. UserController
+4. UserController
 Implements IUserController.
 Uses IUserRepository to interact with the database and process user-related requests.
 
