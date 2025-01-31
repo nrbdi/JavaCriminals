@@ -8,6 +8,9 @@ provides a method getConnection() to establish and return a database connection.
 3. User
 Represents a user in the system (either a customer or an admin); contains fields such as id, name, email, phone number, password, and role;
 provides getters and setters for accessing and modifying user properties.
+4. Characteristics
+Represents the detailed specifications of a vehicle; contains fields like id, vehicleId, enginePower, fuelType, transmission, color, and mileage;
+provides a constructor for initializing characteristics; includes getters and setters for accessing and modifying properties.
 
 Repository Interfaces and Implementations:
 1. IVehicleRepository
@@ -25,12 +28,20 @@ createUser(User user): Creates a new user in the database.
 updateUser(User user): Updates an existing user's details.
 getUserById(int id): Retrieves a user by their ID.
 getAllUsers(): Retrieves all users.
-3. VehicleRepository
+3. ICharacteristicsRepository
+Interface defining methods for handling characteristics-related database operations.
+Methods:
+getCharacteristicsByVehicleId(int vehicleId):retrieves characteristics for a specific vehicle by its ID.
+4. VehicleRepository
 Implements IVehicleRepository.
 Connects to PostgresDB and executes SQL queries related to vehicles.
-4. UserRepository
+5. UserRepository
 Implements IUserRepository.
-Connects to PostgresDB and executes SQL queries related to users.
+Connects to PostgresDB and executes SQL queries related to users. 
+6. CharacteristicsRepository
+Implements ICharacteristicsRepository.
+Connects to the database and executes SQL queries related to vehicle characteristics.
+
 
 Controller Interfaces and Implementations:
 1. IVehicleController
@@ -55,6 +66,14 @@ Uses IVehicleRepository to interact with the database and process vehicle-relate
 4. UserController
 Implements IUserController.
 Uses IUserRepository to interact with the database and process user-related requests.
+5. ICharacteristicsController
+Interface defining methods for handling characteristics-related operations from the user interface.
+Methods:
+String getCharacteristicsByVehicleId(int vehicleId): Retrieves characteristics details for a given vehicle ID. 
+6. CharacteristicsController
+Implements ICharacteristicsController. Uses ICharacteristicsRepository to interact with the database and process characteristics-related requests.
+Methods:
+String getCharacteristicsByVehicleId(int vehicleId): Retrieves and formats characteristics for display.
 
 Application and Main Class:
 1. MyApplication
