@@ -23,7 +23,7 @@ public class Main {
             ICharacteristicsRepository characteristicsRepo = new CharacteristicsRepository(db);
 
             IUserController userController = new UserController(userRepo);
-            IVehicleController vehicleController = new VehicleController(vehicleRepo);
+            IVehicleController vehicleController = new VehicleController(vehicleRepo, userController);
             ICharacteristicsController characteristicsController = new CharacteristicsController(characteristicsRepo);
 
             MyApplication app = new MyApplication(userController, vehicleController, characteristicsController);

@@ -21,7 +21,7 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
     @Override
     public Characteristics getCharacteristicsByVehicleId(int vehicleId) {
         try (Connection conn = db.getConnection()) {
-            String sql = "SELECT * FROM public.\"Characteristics\" WHERE vehicle_id = ?"; // Исправлено имя таблицы
+            String sql = "SELECT * FROM public.\"Characteristics\" WHERE vehicle_id = ?";
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, vehicleId);
             ResultSet rs = st.executeQuery();
@@ -46,7 +46,7 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
     public List<Characteristics> getAllCharacteristics() {
         List<Characteristics> characteristicsList = new ArrayList<>();
         try (Connection conn = db.getConnection()) {
-            String sql = "SELECT * FROM public.\"Characteristics\""; // Исправлено имя таблицы
+            String sql = "SELECT * FROM public.\"Characteristics\"";
             PreparedStatement st = conn.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {

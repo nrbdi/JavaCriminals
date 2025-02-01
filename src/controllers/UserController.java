@@ -7,54 +7,59 @@ import repositories.interfaces.IUserRepository;
 import java.util.List;
 
 public class UserController implements IUserController {
-    private final IUserRepository repo;
-    public UserController(IUserRepository repo) {
-        this.repo = repo;
+    private final IUserRepository userRepository;
+
+    public UserController(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public String createUser(String name, String email, String phoneNumber, String password, String role) {
-        User user = new User(name, email, phoneNumber, password, role);
-
-        boolean created = repo.createUser(user);
-        return (created) ? "User was created" : "User creation failed";
+    public String createUser(String name, String email, String phoneNumber, String password, String role, double cash) {
+        User user = new User(name, email, phoneNumber, password, role, cash);
+        boolean created = userRepository.createUser(user);
+        return created ? "User successfully created!" : "Failed to create user.";
     }
 
     @Override
-    public String updateUser(String name, String email, String phoneNumber, String password, String role) {
-        User user = new User(name, email, phoneNumber, password, role);
-
-        boolean updated = repo.updateUser(user);
-        return (updated) ? "User was successfully updated" : "User update failed";
+    public String updateUser(int id, String name, String email, String phoneNumber, String password, String role, double cash) {
+        User user = new User(id, name, email, phoneNumber, password, role, cash);
+        boolean updated = userRepository.updateUser(user);
+        return updated ? "User successfully updated!" : "Failed to update user.";
     }
-
 
     @Override
     public String getUserById(int id) {
-        User user = repo.getUserById(id);
-        return (user == null) ? "User was not found" : user.toString();
+        User user = userRepository.getUserById(id);
+        return (user != null) ? user.toString() : "User not found.";
+    }
+
+    @Override
+    public String getAllUsers() {
+        List<User> users = userRepository.getAllUsers();
+        if (users.isEmpty()) {
+            return "No users found.";
+        }
+        StringBuilder response = new StringBuilder("List of users:\n");
+        for (User user : users) {
+            response.append(user).append("\n");
+        }
+        return response.toString();
     }
 
     @Override
     public String loginUser(String email, String password) {
-        User user = repo.getUserByEmail(email); // Запрос пользователя из репозитория по email
+        User user = userRepository.getUserByEmail(email);
         if (user == null) {
             return "User with the provided email does not exist.";
         }
         if (!user.getPassword().equals(password)) {
             return "Incorrect password.";
         }
-        return "Login successful! Welcome, " + user.getName() + ".";
+        return "Login successful! " + user.getId() + ", " + user.getCash();
     }
 
-
     @Override
-    public String getAllUsers() {
-        List<User> users = repo.getAllUsers();
-        StringBuilder response = new StringBuilder();
-        for (User user : users) {
-            response.append(user.toString()).append("\n");
-        }
-        return response.toString();
+    public boolean updateUserBalance(int userId, double newBalance) {
+        return userRepository.updateUserBalance(userId, newBalance);
     }
 }
