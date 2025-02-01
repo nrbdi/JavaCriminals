@@ -19,7 +19,7 @@ public class VehicleRepository implements IVehicleRepository {
     public List<Vehicle> getAllVehicles() {
         List<Vehicle> vehicles = new ArrayList<>();
         try (Connection conn = db.getConnection()) {
-            String sql = "SELECT * FROM public.\"Vehicle\""; // Указываем правильное имя таблицы
+            String sql = "SELECT * FROM public.\"Vehicle\"";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 

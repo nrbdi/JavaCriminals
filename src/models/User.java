@@ -7,7 +7,7 @@ public class User {
     private String phoneNumber;
     private String password;
     private String role;
-    private double cash; // Поле для хранения денежных средств пользователя
+    private double cash;
 
     public User() {
     }

@@ -10,5 +10,5 @@ public interface IVehicleRepository {
     Vehicle getVehicleById(int id);
     boolean updateVehicleStatus(int id, String status);
     boolean createVehicle(Vehicle vehicle);
-    boolean isVehicleAvailable(int id); // Добавлен метод для проверки доступности
+    boolean isVehicleAvailable(int id);
 }

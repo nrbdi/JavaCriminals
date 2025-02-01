@@ -8,7 +8,7 @@ public class MyApplication {
     private final IVehicleController vehicleController;
     private final ICharacteristicsController characteristicsController;
     private final Scanner scanner = new Scanner(System.in);
-    private boolean isLoggedIn = false; // Флаг авторизации
+    private boolean isLoggedIn = false;
     private int loggedInUserId;
     private double loggedInUserCash;
 
@@ -244,7 +244,7 @@ public class MyApplication {
                     System.out.println(purchaseResult);
 
                     if (purchaseResult.startsWith("Purchase successful!")) {
-                        loggedInUserCash -= price; // Вычитаем стоимость из локального баланса
+                        loggedInUserCash -= price;
                         System.out.println("Your new balance: " + loggedInUserCash);
                     }
                 }

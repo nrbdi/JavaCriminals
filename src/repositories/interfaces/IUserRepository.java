@@ -10,5 +10,5 @@ public interface IUserRepository {
     List<User> getAllUsers();
     User getUserByEmail(String email);
 
-    boolean updateUserBalance(int userId, double newBalance); // Обновление баланса пользователя
+    boolean updateUserBalance(int userId, double newBalance);
 }

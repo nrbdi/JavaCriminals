@@ -6,5 +6,5 @@ public interface IUserController {
     String getUserById(int id);
     String getAllUsers();
     String loginUser(String email, String password);
-    boolean updateUserBalance(int userId, double newBalance); // Метод обновления баланса
+    boolean updateUserBalance(int userId, double newBalance);
 }
