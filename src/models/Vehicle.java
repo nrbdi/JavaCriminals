@@ -20,6 +20,12 @@ public class Vehicle {
     }
 
     public Vehicle(String brand, String model, String vehicleType, double price, int releaseYear, String status) {
+        this.brand = brand;
+        this.model = model;
+        this.vehicleType = vehicleType;
+        this.price = price;
+        this.releaseYear = releaseYear;
+        this.status = status;
     }
 
     public int getId() {
