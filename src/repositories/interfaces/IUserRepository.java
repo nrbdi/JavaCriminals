@@ -1,6 +1,7 @@
 package repositories.interfaces;
 
 import models.User;
+
 import java.util.List;
 
 public interface IUserRepository {

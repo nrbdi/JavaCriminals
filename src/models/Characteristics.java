@@ -19,13 +19,65 @@ public class Characteristics {
         this.mileage = mileage;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public double getEnginePower() {
+        return enginePower;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public double getMileage() {
+        return mileage;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public void setEnginePower(double enginePower) {
+        this.enginePower = enginePower;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setMileage(double mileage) {
+        this.mileage = mileage;
+    }
+
     @Override
     public String toString() {
-        return "ID: " + id +
-                "\nEngine Power: " + enginePower + " L" +
-                "\nFuel Type: " + fuelType +
-                "\nTransmission: " + transmission +
-                "\nColor: " + color +
-                "\nMileage: " + mileage + " km";
+        return String.format("Engine Power: %.1f L, Fuel Type: %s, Transmission: %s, Color: %s, Mileage: %.1f km",
+                enginePower, fuelType, transmission, color, mileage);
     }
 }

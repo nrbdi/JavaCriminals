@@ -1,35 +1,43 @@
-import controllers.UserController;
-import controllers.VehicleController;
-import controllers.CharacteristicsController;
-import controllers.interfaces.IUserController;
-import controllers.interfaces.IVehicleController;
-import controllers.interfaces.ICharacteristicsController;
+import controllers.*;
+import controllers.interfaces.*;
 import data.PostgresDB;
-import data.interfaces.IDB;
-import repositories.UserRepository;
-import repositories.VehicleRepository;
-import repositories.CharacteristicsRepository;
-import repositories.interfaces.IUserRepository;
-import repositories.interfaces.IVehicleRepository;
-import repositories.interfaces.ICharacteristicsRepository;
+import repositories.*;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            IDB db = new PostgresDB("jdbc:postgresql://localhost:5433", "postgres", "1315162827", "Sale");
+        PostgresDB db = new PostgresDB("jdbc:postgresql://localhost:5433", "postgres", "1315162827", "Sale");
 
-            IUserRepository userRepo = new UserRepository(db);
-            IVehicleRepository vehicleRepo = new VehicleRepository(db);
-            ICharacteristicsRepository characteristicsRepo = new CharacteristicsRepository(db);
+        UserRepository userRepository = new UserRepository(db);
+        VehicleRepository vehicleRepository = new VehicleRepository(db);
+        CharacteristicsRepository characteristicsRepository = new CharacteristicsRepository(db);
+        AdministrationRepository adminRepository = new AdministrationRepository(db);
 
-            IUserController userController = new UserController(userRepo);
-            IVehicleController vehicleController = new VehicleController(vehicleRepo, userController);
-            ICharacteristicsController characteristicsController = new CharacteristicsController(characteristicsRepo);
+        UserController userController = new UserController(userRepository);
+        CharacteristicsController characteristicsController = new CharacteristicsController(characteristicsRepository);
+        VehicleController vehicleController = new VehicleController(vehicleRepository, userController);
+        AdministrationController adminController = new AdministrationController(adminRepository);
 
-            MyApplication app = new MyApplication(userController, vehicleController, characteristicsController);
-            app.start();
-        } catch (Exception e) {
-            System.out.println("Failed to connect to PostgreSQL database: " + e.getMessage());
+        MyApplication userApp = new MyApplication(userController, vehicleController, characteristicsController);
+        MyApplication_2 adminApp = new MyApplication_2(adminController, userController);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Management Application!");
+        System.out.println("Please choose your role:");
+        System.out.println("1. User");
+        System.out.println("2. Admin");
+        System.out.println("3. Manager");
+        System.out.print("Enter your choice: ");
+
+        int roleChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (roleChoice) {
+            case 1 -> userApp.start();
+            case 2 -> adminApp.start("admin");
+            case 3 -> adminApp.start("manager");
+            default -> System.out.println("Invalid choice. Exiting application.");
         }
     }
 }

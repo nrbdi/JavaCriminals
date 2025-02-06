@@ -1,6 +1,7 @@
 package repositories.interfaces;
 
 import models.Vehicle;
+
 import java.util.List;
 
 public interface IVehicleRepository {

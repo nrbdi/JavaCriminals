@@ -1,9 +1,9 @@
 package controllers;
 
+import controllers.interfaces.IUserController;
 import controllers.interfaces.IVehicleController;
 import models.Vehicle;
 import repositories.interfaces.IVehicleRepository;
-import controllers.interfaces.IUserController;
 
 import java.util.List;
 
