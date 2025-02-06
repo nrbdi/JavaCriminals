@@ -6,6 +6,6 @@ public interface IVehicleController {
     String getVehiclesByBrand(String brand);
     String getVehicleStatus(int vehicleId);
     double getVehiclePrice(int vehicleId);
-    String purchaseVehicle(int vehicleId, int userId, double userCash, double discount);
-    String reserveVehicle(int vehicleId, int userId);
+    String purchaseVehicle(int vehicleId, int userId); // Упрощённый метод
+    String reserveVehicle(int vehicleId, int userId); // Упрощённый метод
 }

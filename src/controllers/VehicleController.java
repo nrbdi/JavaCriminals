@@ -2,6 +2,7 @@ package controllers;
 
 import controllers.interfaces.IUserController;
 import controllers.interfaces.IVehicleController;
+import models.User;
 import models.Vehicle;
 import repositories.interfaces.IVehicleRepository;
 
@@ -40,22 +41,20 @@ public class VehicleController implements IVehicleController {
     }
 
     @Override
-    public String getVehiclesByType(String type) {
-        List<Vehicle> vehicles = vehicleRepository.getVehiclesByType(type);
+    public String getVehiclesByType(String vehicleType) {
+        List<Vehicle> vehicles = vehicleRepository.getVehiclesByType(vehicleType);
         if (vehicles.isEmpty()) {
-            return "No vehicles of type \"" + type + "\" found.";
+            return "No vehicles found for the type: " + vehicleType;
         }
 
-        StringBuilder sb = new StringBuilder("Vehicles of type \"" + type + "\":\n");
+        StringBuilder sb = new StringBuilder("Vehicles of type " + vehicleType + ":\n");
         for (Vehicle vehicle : vehicles) {
             sb.append(String.format(
-                    "ID: %d\nBrand: %s\nModel: %s\nType: %s\nPrice: %.2f\nRelease Year: %d\nStatus: %s\n\n",
+                    "ID: %d, Brand: %s, Model: %s, Price: %.2f, Status: %s\n",
                     vehicle.getId(),
                     vehicle.getBrand(),
                     vehicle.getModel(),
-                    vehicle.getVehicleType(),
                     vehicle.getPrice(),
-                    vehicle.getReleaseYear(),
                     vehicle.getStatus()
             ));
         }
@@ -66,19 +65,17 @@ public class VehicleController implements IVehicleController {
     public String getVehiclesByBrand(String brand) {
         List<Vehicle> vehicles = vehicleRepository.getVehiclesByBrand(brand);
         if (vehicles.isEmpty()) {
-            return "No vehicles of brand \"" + brand + "\" found.";
+            return "No vehicles found for the brand: " + brand;
         }
 
-        StringBuilder sb = new StringBuilder("Vehicles of brand \"" + brand + "\":\n");
+        StringBuilder sb = new StringBuilder("Vehicles of brand " + brand + ":\n");
         for (Vehicle vehicle : vehicles) {
             sb.append(String.format(
-                    "ID: %d\nBrand: %s\nModel: %s\nType: %s\nPrice: %.2f\nRelease Year: %d\nStatus: %s\n\n",
+                    "ID: %d, Model: %s, Type: %s, Price: %.2f, Status: %s\n",
                     vehicle.getId(),
-                    vehicle.getBrand(),
                     vehicle.getModel(),
                     vehicle.getVehicleType(),
                     vehicle.getPrice(),
-                    vehicle.getReleaseYear(),
                     vehicle.getStatus()
             ));
         }
@@ -95,42 +92,54 @@ public class VehicleController implements IVehicleController {
     }
 
     @Override
-    public String purchaseVehicle(int vehicleId, int userId, double userCash, double discount) {
+    public String purchaseVehicle(int vehicleId, int userId) {
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
+        User user = userController.getUserById(userId);
+
         if (vehicle == null) {
             return "Vehicle not found.";
         }
-
+        if (user == null) {
+            return "User not found.";
+        }
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) {
             return "This vehicle is not available for purchase.";
         }
 
-        double finalPrice = vehicle.getPrice() - discount;
-        if (userCash < finalPrice) {
+        double price = vehicle.getPrice();
+        double userBalance = user.getCash();
+
+        if (userBalance < price) {
             return "Insufficient funds to purchase this vehicle.";
         }
 
-        boolean updatedVehicleStatus = vehicleRepository.updateVehicleStatus(vehicleId, "sold");
-        if (!updatedVehicleStatus) {
-            return "Failed to update vehicle status.";
-        }
-
-        double newBalance = userCash - finalPrice;
-        boolean updatedUserBalance = userController.updateUserBalance(userId, newBalance);
-        if (!updatedUserBalance) {
+        // Обновляем баланс пользователя
+        double newBalance = userBalance - price;
+        boolean balanceUpdated = userController.updateUserBalance(userId, newBalance);
+        if (!balanceUpdated) {
             return "Failed to update user balance.";
         }
 
-        return "Purchase successful! Vehicle ID: " + vehicleId + " has been sold. Your new balance: " + newBalance;
+        // Обновляем статус автомобиля
+        boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, "sold");
+        if (!vehicleUpdated) {
+            return "Failed to update vehicle status.";
+        }
+
+        return String.format("Purchase successful! Vehicle ID: %d has been sold. Your new balance: %.2f", vehicleId, newBalance);
     }
 
     @Override
     public String reserveVehicle(int vehicleId, int userId) {
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
+        User user = userController.getUserById(userId);
+
         if (vehicle == null) {
             return "Vehicle not found.";
         }
-
+        if (user == null) {
+            return "User not found.";
+        }
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) {
             return "This vehicle is not available for reservation.";
         }
@@ -140,7 +149,7 @@ public class VehicleController implements IVehicleController {
             return "Failed to update vehicle status.";
         }
 
-        return "Reservation successful! Vehicle ID: " + vehicleId + " has been reserved.";
+        return String.format("Reservation successful! Vehicle ID: %d has been reserved.", vehicleId);
     }
 
     @Override

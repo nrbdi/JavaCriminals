@@ -1,10 +1,9 @@
 package controllers.interfaces;
 
-import models.Characteristics;
-import models.Vehicle;
-
 public interface IAdministrationController {
-    boolean deleteUser(int userId);
-    boolean addVehicle(Vehicle vehicle, Characteristics characteristics);
-    boolean deleteVehicle(int vehicleId);
+    String deleteUser(int userId);
+
+    String addVehicle(String brand, String model, String type, double price, int year);
+
+    String deleteVehicle(int vehicleId);
 }

@@ -1,12 +1,13 @@
 package models;
 
 public class Administration {
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String role;
+    private int id;          // Уникальный ID администратора или менеджера
+    private String name;     // Имя администратора или менеджера
+    private String email;    // Электронная почта
+    private String password; // Пароль
+    private String role;     // Роль (admin или manager)
 
+    // Конструктор
     public Administration(int id, String name, String email, String password, String role) {
         this.id = id;
         this.name = name;
@@ -15,6 +16,7 @@ public class Administration {
         this.role = role;
     }
 
+    // Геттеры и сеттеры
     public int getId() {
         return id;
     }
@@ -55,6 +57,7 @@ public class Administration {
         this.role = role;
     }
 
+    // Переопределение метода toString()
     @Override
     public String toString() {
         return String.format("ID: %d, Name: %s, Email: %s, Role: %s", id, name, email, role);

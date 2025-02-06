@@ -14,6 +14,24 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public User loginUser(String email, String password) {
+        User user = userRepository.getUserByEmail(email);
+        if (user == null) {
+            System.out.println("User with the provided email does not exist.");
+            return null;
+        }
+
+        if (!user.getPassword().equals(password)) {
+            System.out.println("Incorrect password.");
+            return null;
+        }
+
+        // Возвращаем объект User
+        return user;
+    }
+
+
+    @Override
     public String createUser(String name, String email, String phoneNumber, String password, String role, double cash) {
         User user = new User(name, email, phoneNumber, password, role, cash);
         boolean created = userRepository.createUser(user);
@@ -28,10 +46,15 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String getUserById(int id) {
+    public User getUserById(int id) {
         User user = userRepository.getUserById(id);
-        return (user != null) ? user.toString() : "User not found.";
+        if (user == null) {
+            System.out.println("User not found.");
+            return null;
+        }
+        return user;
     }
+
 
     @Override
     public String getAllUsers() {
@@ -44,18 +67,6 @@ public class UserController implements IUserController {
             response.append(user).append("\n");
         }
         return response.toString();
-    }
-
-    @Override
-    public String loginUser(String email, String password) {
-        User user = userRepository.getUserByEmail(email);
-        if (user == null) {
-            return "User with the provided email does not exist.";
-        }
-        if (!user.getPassword().equals(password)) {
-            return "Incorrect password.";
-        }
-        return "Login successful! " + user.getId() + ", " + user.getCash();
     }
 
     @Override

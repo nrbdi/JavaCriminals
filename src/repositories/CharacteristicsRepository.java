@@ -28,7 +28,6 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
             if (rs.next()) {
                 return new Characteristics(
                         rs.getInt("id"),
-                        rs.getInt("vehicle_id"),
                         rs.getDouble("engine_power"),
                         rs.getString("fuel_type"),
                         rs.getString("transmission"),
@@ -52,7 +51,6 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
             while (rs.next()) {
                 characteristicsList.add(new Characteristics(
                         rs.getInt("id"),
-                        rs.getInt("vehicle_id"),
                         rs.getDouble("engine_power"),
                         rs.getString("fuel_type"),
                         rs.getString("transmission"),

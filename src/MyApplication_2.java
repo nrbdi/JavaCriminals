@@ -1,18 +1,17 @@
-import controllers.interfaces.IAdministrationController;
-import controllers.interfaces.IUserController;
-import models.Vehicle;
-import models.Characteristics;
+import controllers.AdministrationController;
+import controllers.UserController;
 
 import java.util.Scanner;
 
 public class MyApplication_2 {
-    private final IAdministrationController adminController;
-    private final IUserController userController;
-    private final Scanner scanner = new Scanner(System.in);
+    private final AdministrationController adminController;
+    private final UserController userController;
+    private final Scanner scanner;
 
-    public MyApplication_2(IAdministrationController adminController, IUserController userController) {
+    public MyApplication_2(AdministrationController adminController, UserController userController) {
         this.adminController = adminController;
         this.userController = userController;
+        this.scanner = new Scanner(System.in);
     }
 
     public void start(String role) {
@@ -21,33 +20,29 @@ public class MyApplication_2 {
         } else if ("manager".equalsIgnoreCase(role)) {
             managerMenu();
         } else {
-            System.out.println("Invalid role. Exiting application.");
+            System.out.println("Access denied. Invalid role.");
         }
     }
 
     private void adminMenu() {
         while (true) {
             System.out.println("\nAdmin Menu:");
-            System.out.println("1. Delete a user");
-            System.out.println("2. View all users");
-            System.out.println("3. Add a vehicle");
-            System.out.println("4. Delete a vehicle");
+            System.out.println("1. View all users");
+            System.out.println("2. Delete a user");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Очистка ввода
 
             switch (choice) {
-                case 1 -> deleteUser();
-                case 2 -> viewAllUsers();
-                case 3 -> addVehicle();
-                case 4 -> deleteVehicle();
+                case 1 -> viewAllUsers();
+                case 2 -> deleteUser();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
                 }
-                default -> System.out.println("Invalid choice. Try again.");
+                default -> System.out.println("Invalid choice. Please choose again.");
             }
         }
     }
@@ -61,7 +56,7 @@ public class MyApplication_2 {
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Очистка ввода
 
             switch (choice) {
                 case 1 -> addVehicle();
@@ -70,80 +65,48 @@ public class MyApplication_2 {
                     System.out.println("Logging out...");
                     return;
                 }
-                default -> System.out.println("Invalid choice. Try again.");
+                default -> System.out.println("Invalid choice. Please choose again.");
             }
         }
+    }
+
+    private void viewAllUsers() {
+        String users = userController.getAllUsers();
+        System.out.println(users);
     }
 
     private void deleteUser() {
         System.out.print("Enter user ID to delete: ");
         int userId = scanner.nextInt();
-        scanner.nextLine();
-        boolean success = adminController.deleteUser(userId);
-        if (success) {
-            System.out.println("User with ID " + userId + " has been successfully deleted.");
-        } else {
-            System.out.println("Failed to delete user. Ensure the ID is correct.");
-        }
-    }
+        scanner.nextLine(); // Очистка ввода
 
-    private void viewAllUsers() {
-        String allUsers = userController.getAllUsers();
-        System.out.println("Users:\n" + allUsers);
+        String response = adminController.deleteUser(userId);
+        System.out.println(response);
     }
 
     private void addVehicle() {
-        System.out.println("Enter vehicle details:");
-        System.out.print("Brand: ");
+        System.out.print("Enter vehicle brand: ");
         String brand = scanner.nextLine();
-        System.out.print("Model: ");
+        System.out.print("Enter vehicle model: ");
         String model = scanner.nextLine();
-        System.out.print("Type (SUV, Sedan, etc.): ");
+        System.out.print("Enter vehicle type: ");
         String type = scanner.nextLine();
-        System.out.print("Price: ");
+        System.out.print("Enter vehicle price: ");
         double price = scanner.nextDouble();
-        System.out.print("Release Year: ");
-        int releaseYear = scanner.nextInt();
-        scanner.nextLine(); // Clear the newline
-        System.out.print("Status (available, sold, reserved): ");
-        String status = scanner.nextLine();
+        System.out.print("Enter vehicle release year: ");
+        int year = scanner.nextInt();
+        scanner.nextLine(); // Очистка ввода
 
-        Vehicle vehicle = new Vehicle(brand, model, type, price, releaseYear, status);
-
-        System.out.println("Enter vehicle characteristics:");
-        System.out.print("Engine Power (L): ");
-        double enginePower = scanner.nextDouble();
-        scanner.nextLine(); // Clear the newline
-        System.out.print("Fuel Type: ");
-        String fuelType = scanner.nextLine();
-        System.out.print("Transmission: ");
-        String transmission = scanner.nextLine();
-        System.out.print("Color: ");
-        String color = scanner.nextLine();
-        System.out.print("Mileage (km): ");
-        double mileage = scanner.nextDouble();
-        scanner.nextLine(); // Clear the newline
-
-        Characteristics characteristics = new Characteristics(0, 0, enginePower, fuelType, transmission, color, mileage);
-
-        boolean success = adminController.addVehicle(vehicle, characteristics);
-        if (success) {
-            System.out.println("Vehicle has been successfully added.");
-        } else {
-            System.out.println("Failed to add vehicle.");
-        }
+        String response = adminController.addVehicle(brand, model, type, price, year);
+        System.out.println(response);
     }
-
 
     private void deleteVehicle() {
         System.out.print("Enter vehicle ID to delete: ");
         int vehicleId = scanner.nextInt();
-        scanner.nextLine();
-        boolean success = adminController.deleteVehicle(vehicleId);
-        if (success) {
-            System.out.println("Vehicle with ID " + vehicleId + " has been successfully deleted.");
-        } else {
-            System.out.println("Failed to delete vehicle. Ensure the ID is correct.");
-        }
+        scanner.nextLine(); // Очистка ввода
+
+        String response = adminController.deleteVehicle(vehicleId);
+        System.out.println(response);
     }
 }

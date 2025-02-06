@@ -5,25 +5,54 @@ import models.Characteristics;
 import models.Vehicle;
 import repositories.interfaces.IAdministrationRepository;
 
+import java.util.Scanner;
+
 public class AdministrationController implements IAdministrationController {
     private final IAdministrationRepository adminRepository;
+    private final Scanner scanner;
 
     public AdministrationController(IAdministrationRepository adminRepository) {
         this.adminRepository = adminRepository;
+        this.scanner = new Scanner(System.in);
     }
 
     @Override
-    public boolean deleteUser(int userId) {
-        return adminRepository.deleteUserById(userId);
+    public String deleteUser(int userId) {
+        boolean success = adminRepository.deleteUserById(userId);
+        return success ? "User successfully deleted!" : "Failed to delete user.";
     }
 
     @Override
-    public boolean addVehicle(Vehicle vehicle, Characteristics characteristics) {
-        return adminRepository.addVehicle(vehicle, characteristics);
+    public String addVehicle(String brand, String model, String type, double price, int year) {
+        System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
+        double enginePower = scanner.nextDouble();
+        scanner.nextLine(); // Очистка ввода
+
+        System.out.print("Enter fuel type: ");
+        String fuelType = scanner.nextLine();
+
+        System.out.print("Enter transmission type: ");
+        String transmission = scanner.nextLine();
+
+        System.out.print("Enter color: ");
+        String color = scanner.nextLine();
+
+        System.out.print("Enter mileage (km): ");
+        double mileage = scanner.nextDouble();
+        scanner.nextLine(); // Очистка ввода
+
+        Vehicle vehicle = new Vehicle(brand, model, type, price, year, "available");
+        Characteristics characteristics = new Characteristics(
+                vehicle.getId(), enginePower, fuelType, transmission, color, mileage
+        );
+
+        boolean success = adminRepository.addVehicle(vehicle, characteristics);
+        return success ? "Vehicle successfully added!" : "Failed to add vehicle.";
     }
 
     @Override
-    public boolean deleteVehicle(int vehicleId) {
-        return adminRepository.deleteVehicleById(vehicleId);
+    public String deleteVehicle(int vehicleId) {
+        boolean success = adminRepository.deleteVehicleById(vehicleId);
+        return success ? "Vehicle successfully deleted!" : "Failed to delete vehicle.";
     }
 }
