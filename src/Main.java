@@ -18,10 +18,7 @@ public class Main {
         VehicleController vehicleController = new VehicleController(vehicleRepository, userController);
         AdministrationController adminController = new AdministrationController(adminRepository, userController);
 
-        MyApplication userApp = new MyApplication(vehicleController);
-        MyApplication_2 adminApp = new MyApplication_2(adminController, vehicleController);
-
-        ApplicationMenu appMenu = new ApplicationMenu(userController, vehicleController, userApp, adminApp);
+        ApplicationMenu appMenu = new ApplicationMenu(userController, vehicleController, adminController);
         appMenu.start();
     }
 }

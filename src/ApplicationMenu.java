@@ -2,19 +2,21 @@ import models.User;
 import java.util.Scanner;
 import controllers.UserController;
 import controllers.VehicleController;
+import controllers.AdministrationController;
 
 public class ApplicationMenu {
     private final UserController userController;
     private final VehicleController vehicleController;
-    private final MyApplication userApp;
-    private final MyApplication_2 adminApp;
+    private final AdministrationController adminController;
+    private MyApplication_2 adminApp;
     private final Scanner scanner;
+    private User currentUser;
 
-    public ApplicationMenu(UserController userController, VehicleController vehicleController, MyApplication userApp, MyApplication_2 adminApp) {
+    public ApplicationMenu(UserController userController, VehicleController vehicleController, AdministrationController adminController) {
         this.userController = userController;
         this.vehicleController = vehicleController;
-        this.userApp = userApp;
-        this.adminApp = adminApp;
+        this.adminController = adminController;
+        this.adminApp = new MyApplication_2(adminController, vehicleController);
         this.scanner = new Scanner(System.in);
     }
 
@@ -27,7 +29,7 @@ public class ApplicationMenu {
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка ввода
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> addUser();
@@ -95,14 +97,15 @@ public class ApplicationMenu {
             return;
         }
 
+        this.currentUser = user;
         System.out.printf("Login successful! User ID: %d, Role: %s, Balance: %.2f%n",
                 user.getId(), user.getRole(), user.getCash());
 
-        switch (user.getRole().toLowerCase()) {
-            case "admin" -> adminApp.start("admin");
-            case "manager" -> adminApp.start("manager");
-            case "user" -> userApp.start();
-            default -> System.out.println("Unknown role. Access denied.");
+        if (user.getRole().equalsIgnoreCase("user")) {
+            MyApplication userApp = new MyApplication(vehicleController, currentUser);
+            userApp.start();
+        } else {
+            adminApp.start(user.getRole());
         }
     }
 }

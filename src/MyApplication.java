@@ -1,13 +1,15 @@
 import controllers.VehicleController;
-
+import models.User;
 import java.util.Scanner;
 
 public class MyApplication {
     private final VehicleController vehicleController;
     private final Scanner scanner;
+    private final User currentUser;
 
-    public MyApplication(VehicleController vehicleController) {
+    public MyApplication(VehicleController vehicleController, User currentUser) {
         this.vehicleController = vehicleController;
+        this.currentUser = currentUser;
         this.scanner = new Scanner(System.in);
     }
 
@@ -23,7 +25,7 @@ public class MyApplication {
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка ввода
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> viewAllVehicles();
@@ -60,24 +62,20 @@ public class MyApplication {
     }
 
     private void purchaseVehicle() {
-        System.out.print("Enter your user ID: ");
-        int userId = scanner.nextInt();
         System.out.print("Enter vehicle ID to purchase: ");
         int vehicleId = scanner.nextInt();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
-        String response = vehicleController.purchaseVehicle(vehicleId, userId);
+        String response = vehicleController.purchaseVehicle(vehicleId, currentUser.getId());
         System.out.println(response);
     }
 
     private void reserveVehicle() {
-        System.out.print("Enter your user ID: ");
-        int userId = scanner.nextInt();
         System.out.print("Enter vehicle ID to reserve: ");
         int vehicleId = scanner.nextInt();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
-        String response = vehicleController.reserveVehicle(vehicleId, userId);
+        String response = vehicleController.reserveVehicle(vehicleId, currentUser.getId());
         System.out.println(response);
     }
 }
