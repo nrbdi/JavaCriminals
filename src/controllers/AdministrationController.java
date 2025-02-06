@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.interfaces.IAdministrationController;
+import controllers.interfaces.IUserController;
 import models.Characteristics;
 import models.Vehicle;
 import repositories.interfaces.IAdministrationRepository;
@@ -9,10 +10,12 @@ import java.util.Scanner;
 
 public class AdministrationController implements IAdministrationController {
     private final IAdministrationRepository adminRepository;
+    private final IUserController userController;
     private final Scanner scanner;
 
-    public AdministrationController(IAdministrationRepository adminRepository) {
+    public AdministrationController(IAdministrationRepository adminRepository, IUserController userController) {
         this.adminRepository = adminRepository;
+        this.userController = userController;
         this.scanner = new Scanner(System.in);
     }
 
@@ -26,7 +29,7 @@ public class AdministrationController implements IAdministrationController {
     public String addVehicle(String brand, String model, String type, double price, int year) {
         System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
         double enginePower = scanner.nextDouble();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         System.out.print("Enter fuel type: ");
         String fuelType = scanner.nextLine();
@@ -39,7 +42,7 @@ public class AdministrationController implements IAdministrationController {
 
         System.out.print("Enter mileage (km): ");
         double mileage = scanner.nextDouble();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         Vehicle vehicle = new Vehicle(brand, model, type, price, year, "available");
         Characteristics characteristics = new Characteristics(
@@ -54,5 +57,9 @@ public class AdministrationController implements IAdministrationController {
     public String deleteVehicle(int vehicleId) {
         boolean success = adminRepository.deleteVehicleById(vehicleId);
         return success ? "Vehicle successfully deleted!" : "Failed to delete vehicle.";
+    }
+
+    public String getAllUsers() {
+        return userController.getAllUsers();
     }
 }

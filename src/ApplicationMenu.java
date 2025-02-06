@@ -1,15 +1,18 @@
 import models.User;
 import java.util.Scanner;
 import controllers.UserController;
+import controllers.VehicleController;
 
 public class ApplicationMenu {
     private final UserController userController;
+    private final VehicleController vehicleController;
     private final MyApplication userApp;
     private final MyApplication_2 adminApp;
     private final Scanner scanner;
 
-    public ApplicationMenu(UserController userController, MyApplication userApp, MyApplication_2 adminApp) {
+    public ApplicationMenu(UserController userController, VehicleController vehicleController, MyApplication userApp, MyApplication_2 adminApp) {
         this.userController = userController;
+        this.vehicleController = vehicleController;
         this.userApp = userApp;
         this.adminApp = adminApp;
         this.scanner = new Scanner(System.in);

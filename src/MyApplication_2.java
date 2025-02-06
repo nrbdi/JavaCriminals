@@ -1,16 +1,16 @@
 import controllers.AdministrationController;
+import controllers.VehicleController;
 import controllers.UserController;
-
 import java.util.Scanner;
 
 public class MyApplication_2 {
     private final AdministrationController adminController;
-    private final UserController userController;
+    private final VehicleController vehicleController;
     private final Scanner scanner;
 
-    public MyApplication_2(AdministrationController adminController, UserController userController) {
+    public MyApplication_2(AdministrationController adminController, VehicleController vehicleController) {
         this.adminController = adminController;
-        this.userController = userController;
+        this.vehicleController = vehicleController;
         this.scanner = new Scanner(System.in);
     }
 
@@ -29,6 +29,7 @@ public class MyApplication_2 {
             System.out.println("\nAdmin Menu:");
             System.out.println("1. View all users");
             System.out.println("2. Delete a user");
+            System.out.println("3. Show purchase & reservation report"); // Теперь только здесь
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -38,6 +39,7 @@ public class MyApplication_2 {
             switch (choice) {
                 case 1 -> viewAllUsers();
                 case 2 -> deleteUser();
+                case 3 -> showPurchaseReport();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -52,6 +54,7 @@ public class MyApplication_2 {
             System.out.println("\nManager Menu:");
             System.out.println("1. Add a vehicle");
             System.out.println("2. Delete a vehicle");
+            System.out.println("3. Show purchase & reservation report"); // Теперь здесь
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -61,6 +64,7 @@ public class MyApplication_2 {
             switch (choice) {
                 case 1 -> addVehicle();
                 case 2 -> deleteVehicle();
+                case 3 -> showPurchaseReport();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -70,8 +74,13 @@ public class MyApplication_2 {
         }
     }
 
+    private void showPurchaseReport() {
+        System.out.println("\nFetching purchase and reservation report...");
+        vehicleController.showJoinedTableView();
+    }
+
     private void viewAllUsers() {
-        String users = userController.getAllUsers();
+        String users = adminController.getAllUsers();
         System.out.println(users);
     }
 

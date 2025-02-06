@@ -32,22 +32,21 @@ public class AdministrationRepository implements IAdministrationRepository {
     @Override
     public boolean addVehicle(Vehicle vehicle, Characteristics characteristics) {
         try (Connection conn = db.getConnection()) {
-            // Insert into Vehicle table
+            // Вставка в таблицу Vehicle (статус всегда "available")
             String vehicleSql = "INSERT INTO public.\"Vehicle\" (brand, model, vehicle_type, price, release_year, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+                    "VALUES (?, ?, ?, ?, ?, 'available') RETURNING id";
             PreparedStatement vehicleSt = conn.prepareStatement(vehicleSql);
             vehicleSt.setString(1, vehicle.getBrand());
             vehicleSt.setString(2, vehicle.getModel());
             vehicleSt.setString(3, vehicle.getVehicleType());
             vehicleSt.setDouble(4, vehicle.getPrice());
             vehicleSt.setInt(5, vehicle.getReleaseYear());
-            vehicleSt.setString(6, vehicle.getStatus());
 
             var rs = vehicleSt.executeQuery();
             if (rs.next()) {
                 int vehicleId = rs.getInt("id");
 
-                // Insert into Characteristics table
+                // Вставка характеристик в таблицу Characteristics
                 String charSql = "INSERT INTO public.\"Characteristics\" (vehicle_id, engine_power, fuel_type, transmission, color, mileage) " +
                         "VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement charSt = conn.prepareStatement(charSql);
@@ -69,13 +68,13 @@ public class AdministrationRepository implements IAdministrationRepository {
     @Override
     public boolean deleteVehicleById(int vehicleId) {
         try (Connection conn = db.getConnection()) {
-            // Delete from Characteristics table
+            // Удаление характеристик
             String charSql = "DELETE FROM public.\"Characteristics\" WHERE vehicle_id = ?";
             PreparedStatement charSt = conn.prepareStatement(charSql);
             charSt.setInt(1, vehicleId);
             charSt.executeUpdate();
 
-            // Delete from Vehicle table
+            // Удаление автомобиля
             String vehicleSql = "DELETE FROM public.\"Vehicle\" WHERE id = ?";
             PreparedStatement vehicleSt = conn.prepareStatement(vehicleSql);
             vehicleSt.setInt(1, vehicleId);

@@ -6,6 +6,7 @@ import models.User;
 import models.Vehicle;
 import repositories.interfaces.IVehicleRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class VehicleController implements IVehicleController {
@@ -96,37 +97,24 @@ public class VehicleController implements IVehicleController {
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         User user = userController.getUserById(userId);
 
-        if (vehicle == null) {
-            return "Vehicle not found.";
-        }
-        if (user == null) {
-            return "User not found.";
-        }
-        if (!"available".equalsIgnoreCase(vehicle.getStatus())) {
-            return "This vehicle is not available for purchase.";
-        }
-
-        double price = vehicle.getPrice();
-        double userBalance = user.getCash();
-
-        if (userBalance < price) {
-            return "Insufficient funds to purchase this vehicle.";
-        }
+        if (vehicle == null) return "Vehicle not found.";
+        if (user == null) return "User not found.";
+        if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for purchase.";
+        if (user.getCash() < vehicle.getPrice()) return "Insufficient funds to purchase this vehicle.";
 
         // Обновляем баланс пользователя
-        double newBalance = userBalance - price;
+        double newBalance = user.getCash() - vehicle.getPrice();
         boolean balanceUpdated = userController.updateUserBalance(userId, newBalance);
-        if (!balanceUpdated) {
-            return "Failed to update user balance.";
-        }
+        if (!balanceUpdated) return "Failed to update user balance.";
 
-        // Обновляем статус автомобиля
-        boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, "sold");
-        if (!vehicleUpdated) {
-            return "Failed to update vehicle status.";
-        }
+        // Обновляем статус автомобиля + добавляем дату покупки
+        boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "sold", LocalDate.now());
+        if (!vehicleUpdated) return "Failed to update vehicle status.";
 
-        return String.format("Purchase successful! Vehicle ID: %d has been sold. Your new balance: %.2f", vehicleId, newBalance);
+        return String.format(
+                "Purchase successful!\nVehicle Details:\n- Brand: %s\n- Model: %s\n- Price: %.2f\n- Purchase Date: %s\nYour new balance: %.2f",
+                vehicle.getBrand(), vehicle.getModel(), vehicle.getPrice(), LocalDate.now(), newBalance
+        );
     }
 
     @Override
@@ -134,20 +122,13 @@ public class VehicleController implements IVehicleController {
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         User user = userController.getUserById(userId);
 
-        if (vehicle == null) {
-            return "Vehicle not found.";
-        }
-        if (user == null) {
-            return "User not found.";
-        }
-        if (!"available".equalsIgnoreCase(vehicle.getStatus())) {
-            return "This vehicle is not available for reservation.";
-        }
+        if (vehicle == null) return "Vehicle not found.";
+        if (user == null) return "User not found.";
+        if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for reservation.";
 
-        boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, "reserved");
-        if (!updated) {
-            return "Failed to update vehicle status.";
-        }
+        // Обновляем статус автомобиля на "reserved"
+        boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "reserved", null);
+        if (!updated) return "Failed to update vehicle status.";
 
         return String.format("Reservation successful! Vehicle ID: %d has been reserved.", vehicleId);
     }
@@ -156,5 +137,11 @@ public class VehicleController implements IVehicleController {
     public double getVehiclePrice(int vehicleId) {
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         return (vehicle != null) ? vehicle.getPrice() : -1;
+    }
+
+    // Новый метод для вызова объединённой таблицы (отчёта)
+    @Override
+    public void showJoinedTableView() {
+        vehicleRepository.printJoinedTableView();
     }
 }

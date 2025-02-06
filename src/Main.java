@@ -16,12 +16,12 @@ public class Main {
 
         UserController userController = new UserController(userRepository);
         VehicleController vehicleController = new VehicleController(vehicleRepository, userController);
-        AdministrationController adminController = new AdministrationController(adminRepository);
+        AdministrationController adminController = new AdministrationController(adminRepository, userController);
 
         MyApplication userApp = new MyApplication(vehicleController);
-        MyApplication_2 adminApp = new MyApplication_2(adminController, userController);
+        MyApplication_2 adminApp = new MyApplication_2(adminController, vehicleController);
 
-        ApplicationMenu appMenu = new ApplicationMenu(userController, userApp, adminApp);
+        ApplicationMenu appMenu = new ApplicationMenu(userController, vehicleController, userApp, adminApp);
         appMenu.start();
     }
 }
