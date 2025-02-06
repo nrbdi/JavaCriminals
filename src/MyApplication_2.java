@@ -29,12 +29,12 @@ public class MyApplication_2 {
             System.out.println("\nAdmin Menu:");
             System.out.println("1. View all users");
             System.out.println("2. Delete a user");
-            System.out.println("3. Show purchase & reservation report"); // Теперь только здесь
+            System.out.println("3. Show purchase & reservation report");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка ввода
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> viewAllUsers();
@@ -54,12 +54,12 @@ public class MyApplication_2 {
             System.out.println("\nManager Menu:");
             System.out.println("1. Add a vehicle");
             System.out.println("2. Delete a vehicle");
-            System.out.println("3. Show purchase & reservation report"); // Теперь здесь
+            System.out.println("3. Show purchase & reservation report");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Очистка ввода
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> addVehicle();
@@ -87,7 +87,7 @@ public class MyApplication_2 {
     private void deleteUser() {
         System.out.print("Enter user ID to delete: ");
         int userId = scanner.nextInt();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         String response = adminController.deleteUser(userId);
         System.out.println(response);
@@ -104,7 +104,7 @@ public class MyApplication_2 {
         double price = scanner.nextDouble();
         System.out.print("Enter vehicle release year: ");
         int year = scanner.nextInt();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         String response = adminController.addVehicle(brand, model, type, price, year);
         System.out.println(response);
@@ -113,7 +113,7 @@ public class MyApplication_2 {
     private void deleteVehicle() {
         System.out.print("Enter vehicle ID to delete: ");
         int vehicleId = scanner.nextInt();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         String response = adminController.deleteVehicle(vehicleId);
         System.out.println(response);

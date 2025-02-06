@@ -9,6 +9,5 @@ public interface IVehicleController {
     String purchaseVehicle(int vehicleId, int userId);
     String reserveVehicle(int vehicleId, int userId);
 
-    // Новый метод для вывода отчёта (объединённой таблицы)
     void showJoinedTableView();
 }

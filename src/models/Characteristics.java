@@ -9,7 +9,6 @@ public class Characteristics {
     private String color;
     private double mileage;
 
-    // Конструктор
     public Characteristics(int id, double enginePower, String fuelType, String transmission, String color, double mileage) {
         this.id = id;
         this.vehicleId = vehicleId;
@@ -20,7 +19,6 @@ public class Characteristics {
         this.mileage = mileage;
     }
 
-    // Геттеры
     public int getId() {
         return id;
     }
@@ -49,7 +47,6 @@ public class Characteristics {
         return mileage;
     }
 
-    // Сеттеры
     public void setId(int id) {
         this.id = id;
     }
@@ -78,7 +75,6 @@ public class Characteristics {
         this.mileage = mileage;
     }
 
-    // Переопределение метода toString()
     @Override
     public String toString() {
         return String.format("Engine Power: %.1f L, Fuel Type: %s, Transmission: %s, Color: %s, Mileage: %.1f km",

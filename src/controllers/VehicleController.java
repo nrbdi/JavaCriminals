@@ -102,12 +102,10 @@ public class VehicleController implements IVehicleController {
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for purchase.";
         if (user.getCash() < vehicle.getPrice()) return "Insufficient funds to purchase this vehicle.";
 
-        // Обновляем баланс пользователя
         double newBalance = user.getCash() - vehicle.getPrice();
         boolean balanceUpdated = userController.updateUserBalance(userId, newBalance);
         if (!balanceUpdated) return "Failed to update user balance.";
 
-        // Обновляем статус автомобиля + добавляем дату покупки
         boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "sold", LocalDate.now());
         if (!vehicleUpdated) return "Failed to update vehicle status.";
 
@@ -126,7 +124,6 @@ public class VehicleController implements IVehicleController {
         if (user == null) return "User not found.";
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for reservation.";
 
-        // Обновляем статус автомобиля на "reserved"
         boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "reserved", null);
         if (!updated) return "Failed to update vehicle status.";
 
@@ -139,7 +136,6 @@ public class VehicleController implements IVehicleController {
         return (vehicle != null) ? vehicle.getPrice() : -1;
     }
 
-    // Новый метод для вызова объединённой таблицы (отчёта)
     @Override
     public void showJoinedTableView() {
         vehicleRepository.printJoinedTableView();

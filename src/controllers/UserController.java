@@ -26,7 +26,6 @@ public class UserController implements IUserController {
             return null;
         }
 
-        // Возвращаем объект User
         return user;
     }
 

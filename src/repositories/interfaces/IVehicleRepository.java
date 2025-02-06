@@ -11,12 +11,10 @@ public interface IVehicleRepository {
     List<Vehicle> getVehiclesByBrand(String brand);
     Vehicle getVehicleById(int id);
 
-    // Обновлённый метод: теперь принимает userId и дату покупки
     boolean updateVehicleStatus(int id, int userId, String status, LocalDate purchaseDate);
 
     boolean createVehicle(Vehicle vehicle);
     boolean isVehicleAvailable(int id);
 
-    // Новый метод для объединённой таблицы (отчёт о покупках/бронированиях)
     void printJoinedTableView();
 }

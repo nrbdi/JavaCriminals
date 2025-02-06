@@ -7,6 +7,6 @@ public interface IUserController {
     String updateUser(int id, String name, String email, String phoneNumber, String password, String role, double cash);
     User getUserById(int id);
     String getAllUsers();
-    User loginUser(String email, String password); // Возвращаем объект User
+    User loginUser(String email, String password);
     boolean updateUserBalance(int userId, double newBalance);
 }

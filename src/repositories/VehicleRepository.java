@@ -134,7 +134,6 @@ public class VehicleRepository implements IVehicleRepository {
         return false;
     }
 
-    // Метод для отображения объединённой таблицы (отчёта)
     public void printJoinedTableView() {
         String sql = "SELECT u.id AS user_id, u.name AS user_name, u.email AS user_email, " +
                 "v.brand AS vehicle_brand, v.model AS vehicle_model, v.price AS vehicle_price, " +
@@ -172,7 +171,6 @@ public class VehicleRepository implements IVehicleRepository {
         }
     }
 
-    // Метод для преобразования результата SQL-запроса в объект Vehicle
     private Vehicle mapVehicle(ResultSet rs) throws SQLException {
         return new Vehicle(
                 rs.getInt("id"),

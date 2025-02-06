@@ -55,7 +55,7 @@ public class ApplicationMenu {
         String role = scanner.nextLine();
         System.out.println("Enter cash amount:");
         double cash = scanner.nextDouble();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         String response = userController.createUser(name, email, phoneNumber, password, role, cash);
         System.out.println(response);
@@ -77,7 +77,7 @@ public class ApplicationMenu {
         String role = scanner.nextLine();
         System.out.println("Enter new cash amount:");
         double cash = scanner.nextDouble();
-        scanner.nextLine(); // Очистка ввода
+        scanner.nextLine();
 
         String response = userController.updateUser(id, name, email, phoneNumber, password, role, cash);
         System.out.println(response);
