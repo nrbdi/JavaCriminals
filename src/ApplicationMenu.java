@@ -3,6 +3,7 @@ import java.util.Scanner;
 import controllers.UserController;
 import controllers.VehicleController;
 import controllers.AdministrationController;
+import utils.Validator;
 
 public class ApplicationMenu {
     private final UserController userController;
@@ -16,7 +17,7 @@ public class ApplicationMenu {
         this.userController = userController;
         this.vehicleController = vehicleController;
         this.adminController = adminController;
-        this.adminApp = new MyApplication_2(adminController, vehicleController);
+        this.adminApp = new MyApplication_2(adminController, vehicleController, userController);
         this.scanner = new Scanner(System.in);
     }
 
@@ -45,19 +46,57 @@ public class ApplicationMenu {
     }
 
     private void addUser() {
-        System.out.println("Enter name:");
-        String name = scanner.nextLine();
-        System.out.println("Enter email:");
-        String email = scanner.nextLine();
-        System.out.println("Enter phone number:");
-        String phoneNumber = scanner.nextLine();
-        System.out.println("Enter password:");
-        String password = scanner.nextLine();
-        System.out.println("Enter role (user/admin/manager):");
-        String role = scanner.nextLine();
-        System.out.println("Enter cash amount:");
-        double cash = scanner.nextDouble();
-        scanner.nextLine();
+        String name, email, phoneNumber, password, role;
+        double cash;
+
+        do {
+            System.out.println("Enter name:");
+            name = scanner.nextLine();
+            if (!Validator.isNonEmpty(name)) {
+                System.out.println("Error: Name cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(name));
+
+        do {
+            System.out.println("Enter email:");
+            email = scanner.nextLine();
+            if (!Validator.isEmailValid(email)) {
+                System.out.println("Error: Invalid email format! Please try again.");
+            }
+        } while (!Validator.isEmailValid(email));
+
+        do {
+            System.out.println("Enter phone number:");
+            phoneNumber = scanner.nextLine();
+            if (!Validator.isNonEmpty(phoneNumber)) {
+                System.out.println("Error: Phone number cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(phoneNumber));
+
+        do {
+            System.out.println("Enter password:");
+            password = scanner.nextLine();
+            if (!Validator.isPasswordValid(password)) {
+                System.out.println("Error: Password must be at least 6 characters long!");
+            }
+        } while (!Validator.isPasswordValid(password));
+
+        do {
+            System.out.println("Enter role (user/admin/manager):");
+            role = scanner.nextLine();
+            if (!Validator.isNonEmpty(role)) {
+                System.out.println("Error: Role cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(role));
+
+        do {
+            System.out.println("Enter cash amount:");
+            cash = scanner.nextDouble();
+            scanner.nextLine();
+            if (!Validator.isPositiveNumber(cash)) {
+                System.out.println("Error: Cash cannot be negative!");
+            }
+        } while (!Validator.isPositiveNumber(cash));
 
         String response = userController.createUser(name, email, phoneNumber, password, role, cash);
         System.out.println(response);
@@ -67,29 +106,86 @@ public class ApplicationMenu {
         System.out.println("Enter user ID:");
         int id = scanner.nextInt();
         scanner.nextLine();
-        System.out.println("Enter new name:");
-        String name = scanner.nextLine();
-        System.out.println("Enter new email:");
-        String email = scanner.nextLine();
-        System.out.println("Enter new phone number:");
-        String phoneNumber = scanner.nextLine();
-        System.out.println("Enter new password:");
-        String password = scanner.nextLine();
-        System.out.println("Enter new role (user/admin/manager):");
-        String role = scanner.nextLine();
-        System.out.println("Enter new cash amount:");
-        double cash = scanner.nextDouble();
-        scanner.nextLine();
+
+        if (!Validator.isPositiveInteger(id)) {
+            System.out.println("Error: User ID must be a positive number!");
+            return;
+        }
+
+        String name, email, phoneNumber, password, role;
+        double cash;
+
+        do {
+            System.out.println("Enter new name:");
+            name = scanner.nextLine();
+            if (!Validator.isNonEmpty(name)) {
+                System.out.println("Error: Name cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(name));
+
+        do {
+            System.out.println("Enter new email:");
+            email = scanner.nextLine();
+            if (!Validator.isEmailValid(email)) {
+                System.out.println("Error: Invalid email format!");
+            }
+        } while (!Validator.isEmailValid(email));
+
+        do {
+            System.out.println("Enter new phone number:");
+            phoneNumber = scanner.nextLine();
+            if (!Validator.isNonEmpty(phoneNumber)) {
+                System.out.println("Error: Phone number cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(phoneNumber));
+
+        do {
+            System.out.println("Enter new password:");
+            password = scanner.nextLine();
+            if (!Validator.isPasswordValid(password)) {
+                System.out.println("Error: Password must be at least 6 characters long!");
+            }
+        } while (!Validator.isPasswordValid(password));
+
+        do {
+            System.out.println("Enter new role (user/admin/manager):");
+            role = scanner.nextLine();
+            if (!Validator.isNonEmpty(role)) {
+                System.out.println("Error: Role cannot be empty!");
+            }
+        } while (!Validator.isNonEmpty(role));
+
+        do {
+            System.out.println("Enter new cash amount:");
+            cash = scanner.nextDouble();
+            scanner.nextLine();
+            if (!Validator.isPositiveNumber(cash)) {
+                System.out.println("Error: Cash cannot be negative!");
+            }
+        } while (!Validator.isPositiveNumber(cash));
 
         String response = userController.updateUser(id, name, email, phoneNumber, password, role, cash);
         System.out.println(response);
     }
 
     private void loginAndRedirect() {
-        System.out.println("Enter email:");
-        String email = scanner.nextLine();
-        System.out.println("Enter password:");
-        String password = scanner.nextLine();
+        String email, password;
+
+        do {
+            System.out.println("Enter email:");
+            email = scanner.nextLine();
+            if (!Validator.isEmailValid(email)) {
+                System.out.println("Error: Invalid email format! Please try again.");
+            }
+        } while (!Validator.isEmailValid(email));
+
+        do {
+            System.out.println("Enter password:");
+            password = scanner.nextLine();
+            if (!Validator.isPasswordValid(password)) {
+                System.out.println("Error: Password must be at least 6 characters long!");
+            }
+        } while (!Validator.isPasswordValid(password));
 
         User user = userController.loginUser(email, password);
         if (user == null) {
@@ -108,4 +204,5 @@ public class ApplicationMenu {
             adminApp.start(user.getRole());
         }
     }
+
 }

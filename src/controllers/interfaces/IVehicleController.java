@@ -8,6 +8,6 @@ public interface IVehicleController {
     double getVehiclePrice(int vehicleId);
     String purchaseVehicle(int vehicleId, int userId);
     String reserveVehicle(int vehicleId, int userId);
-
     void showJoinedTableView();
+    String getVehicleById(int vehicleId);
 }

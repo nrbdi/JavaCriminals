@@ -3,6 +3,7 @@ package controllers;
 import controllers.interfaces.IUserController;
 import models.User;
 import repositories.interfaces.IUserRepository;
+import utils.Validator;
 
 import java.util.List;
 
@@ -15,6 +16,16 @@ public class UserController implements IUserController {
 
     @Override
     public User loginUser(String email, String password) {
+        if (!Validator.isEmailValid(email)) {
+            System.out.println("Error: Invalid email format.");
+            return null;
+        }
+
+        if (!Validator.isPasswordValid(password)) {
+            System.out.println("Error: Password must be at least 6 characters long.");
+            return null;
+        }
+
         User user = userRepository.getUserByEmail(email);
         if (user == null) {
             System.out.println("User with the provided email does not exist.");
@@ -29,9 +40,27 @@ public class UserController implements IUserController {
         return user;
     }
 
-
     @Override
     public String createUser(String name, String email, String phoneNumber, String password, String role, double cash) {
+        if (!Validator.isNonEmpty(name)) {
+            return "Error: Name cannot be empty.";
+        }
+        if (!Validator.isEmailValid(email)) {
+            return "Error: Invalid email format.";
+        }
+        if (!Validator.isPasswordValid(password)) {
+            return "Error: Password must be at least 6 characters long.";
+        }
+        if (!Validator.isNonEmpty(phoneNumber)) {
+            return "Error: Phone number cannot be empty.";
+        }
+        if (!Validator.isNonEmpty(role)) {
+            return "Error: Role cannot be empty.";
+        }
+        if (!Validator.isPositiveNumber(cash)) {
+            return "Error: Cash amount cannot be negative.";
+        }
+
         User user = new User(name, email, phoneNumber, password, role, cash);
         boolean created = userRepository.createUser(user);
         return created ? "User successfully created!" : "Failed to create user.";
@@ -39,19 +68,41 @@ public class UserController implements IUserController {
 
     @Override
     public String updateUser(int id, String name, String email, String phoneNumber, String password, String role, double cash) {
+        if (!Validator.isPositiveInteger(id)) {
+            return "Error: User ID must be a positive number.";
+        }
+        if (!Validator.isNonEmpty(name)) {
+            return "Error: Name cannot be empty.";
+        }
+        if (!Validator.isEmailValid(email)) {
+            return "Error: Invalid email format.";
+        }
+        if (!Validator.isPasswordValid(password)) {
+            return "Error: Password must be at least 6 characters long.";
+        }
+        if (!Validator.isNonEmpty(phoneNumber)) {
+            return "Error: Phone number cannot be empty.";
+        }
+        if (!Validator.isNonEmpty(role)) {
+            return "Error: Role cannot be empty.";
+        }
+        if (!Validator.isPositiveNumber(cash)) {
+            return "Error: Cash amount cannot be negative.";
+        }
+
         User user = new User(id, name, email, phoneNumber, password, role, cash);
         boolean updated = userRepository.updateUser(user);
         return updated ? "User successfully updated!" : "Failed to update user.";
     }
 
     @Override
-    public User getUserById(int id) {
-        User user = userRepository.getUserById(id);
-        if (user == null) {
-            System.out.println("User not found.");
+    public User getUserById(int userId) {
+        if (!Validator.isPositiveInteger(userId)) {
+            System.out.println("Error: User ID must be a positive number.");
             return null;
         }
-        return user;
+
+        return userRepository.getUserById(userId);
     }
 
 
@@ -70,6 +121,14 @@ public class UserController implements IUserController {
 
     @Override
     public boolean updateUserBalance(int userId, double newBalance) {
+        if (!Validator.isPositiveInteger(userId)) {
+            System.out.println("Error: User ID must be a positive number.");
+            return false;
+        }
+        if (!Validator.isPositiveNumber(newBalance)) {
+            System.out.println("Error: Balance must be a positive number.");
+            return false;
+        }
         return userRepository.updateUserBalance(userId, newBalance);
     }
 }

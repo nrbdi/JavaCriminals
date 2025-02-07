@@ -5,6 +5,7 @@ import controllers.interfaces.IVehicleController;
 import models.User;
 import models.Vehicle;
 import repositories.interfaces.IVehicleRepository;
+import utils.Validator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -85,6 +86,10 @@ public class VehicleController implements IVehicleController {
 
     @Override
     public String getVehicleStatus(int vehicleId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return "Error: Vehicle ID must be a positive number.";
+        }
+
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         if (vehicle == null) {
             return "Vehicle not found.";
@@ -93,7 +98,36 @@ public class VehicleController implements IVehicleController {
     }
 
     @Override
+    public String getVehicleById(int vehicleId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return "Error: Vehicle ID must be a positive number.";
+        }
+
+        Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
+        if (vehicle == null) {
+            return "Vehicle not found.";
+        }
+
+        return String.format(
+                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s",
+                vehicle.getBrand(),
+                vehicle.getModel(),
+                vehicle.getVehicleType(),
+                vehicle.getPrice(),
+                vehicle.getReleaseYear(),
+                vehicle.getStatus()
+        );
+    }
+
+    @Override
     public String purchaseVehicle(int vehicleId, int userId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return "Error: Vehicle ID must be a positive number.";
+        }
+        if (!Validator.isPositiveInteger(userId)) {
+            return "Error: User ID must be a positive number.";
+        }
+
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         User user = userController.getUserById(userId);
 
@@ -102,12 +136,10 @@ public class VehicleController implements IVehicleController {
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for purchase.";
         if (user.getCash() < vehicle.getPrice()) return "Insufficient funds to purchase this vehicle.";
 
-        // Обновляем баланс пользователя
         double newBalance = user.getCash() - vehicle.getPrice();
         boolean balanceUpdated = userController.updateUserBalance(userId, newBalance);
         if (!balanceUpdated) return "Failed to update user balance.";
 
-        // Обновляем статус автомобиля + добавляем дату покупки
         boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "sold", LocalDate.now());
         if (!vehicleUpdated) return "Failed to update vehicle status.";
 
@@ -119,6 +151,13 @@ public class VehicleController implements IVehicleController {
 
     @Override
     public String reserveVehicle(int vehicleId, int userId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return "Error: Vehicle ID must be a positive number.";
+        }
+        if (!Validator.isPositiveInteger(userId)) {
+            return "Error: User ID must be a positive number.";
+        }
+
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         User user = userController.getUserById(userId);
 
@@ -126,7 +165,6 @@ public class VehicleController implements IVehicleController {
         if (user == null) return "User not found.";
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for reservation.";
 
-        // Обновляем статус автомобиля на "reserved"
         boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "reserved", null);
         if (!updated) return "Failed to update vehicle status.";
 
@@ -135,11 +173,14 @@ public class VehicleController implements IVehicleController {
 
     @Override
     public double getVehiclePrice(int vehicleId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return -1;
+        }
+
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
         return (vehicle != null) ? vehicle.getPrice() : -1;
     }
 
-    // Новый метод для вызова объединённой таблицы (отчёта)
     @Override
     public void showJoinedTableView() {
         vehicleRepository.printJoinedTableView();
