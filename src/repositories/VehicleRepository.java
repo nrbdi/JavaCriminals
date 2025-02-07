@@ -78,6 +78,50 @@ public class VehicleRepository implements IVehicleRepository {
     }
 
     @Override
+    public String getVehicleDetailsById(int vehicleId) {
+        try (Connection conn = db.getConnection();
+             PreparedStatement statement = conn.prepareStatement(
+                     "SELECT v.id, v.brand, v.model, v.vehicle_type, v.price, v.release_year, " +
+                             "c.engine_power, c.fuel_type, c.transmission, c.color, c.mileage " +
+                             "FROM public.\"Vehicle\" v " +
+                             "JOIN public.\"Characteristics\" c ON v.id = c.vehicle_id " +
+                             "WHERE v.id = ?")) {
+            statement.setInt(1, vehicleId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return String.format("""
+                        Vehicle Details:
+                        - Brand: %s
+                        - Model: %s
+                        - Type: %s
+                        - Price: %.2f
+                        - Release Year: %d
+                        - Engine Power: %.1f L
+                        - Fuel Type: %s
+                        - Transmission: %s
+                        - Color: %s
+                        - Mileage: %.1f km""",
+                        resultSet.getString("brand"),
+                        resultSet.getString("model"),
+                        resultSet.getString("vehicle_type"),
+                        resultSet.getDouble("price"),
+                        resultSet.getInt("release_year"),
+                        resultSet.getDouble("engine_power"),
+                        resultSet.getString("fuel_type"),
+                        resultSet.getString("transmission"),
+                        resultSet.getString("color"),
+                        resultSet.getDouble("mileage"));
+            } else {
+                return "Vehicle not found.";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error retrieving vehicle details.";
+        }
+    }
+
+    @Override
     public boolean updateVehicleStatus(int id, int userId, String status, LocalDate purchaseDate) {
         try (Connection conn = db.getConnection()) {
             String sql = "UPDATE public.\"Vehicle\" SET status = ?, user_id = ?, purchase_date = ? WHERE id = ?";

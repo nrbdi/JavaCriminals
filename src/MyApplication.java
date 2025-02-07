@@ -21,6 +21,7 @@ public class MyApplication {
             System.out.println("3. Filter vehicles by brand");
             System.out.println("4. Purchase a vehicle");
             System.out.println("5. Reserve a vehicle");
+            System.out.println("6. View vehicle details by ID"); // ✅ Новый пункт
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -33,11 +34,12 @@ public class MyApplication {
                 case 3 -> filterVehiclesByBrand();
                 case 4 -> purchaseVehicle();
                 case 5 -> reserveVehicle();
+                case 6 -> viewVehicleDetailsById(); // ✅ Вызываем метод
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
                 }
-                default -> System.out.println("Invalid choice. Please choose again.");
+                default -> System.out.println("Invalid choice. Please try again.");
             }
         }
     }
@@ -77,5 +79,19 @@ public class MyApplication {
 
         String response = vehicleController.reserveVehicle(vehicleId, currentUser.getId());
         System.out.println(response);
+    }
+
+    private void viewVehicleDetailsById() {
+        System.out.print("Enter vehicle ID: ");
+        String input = scanner.nextLine();
+
+        if (!input.matches("\\d+")) {
+            System.out.println("Error: Please enter a valid vehicle ID.");
+            return;
+        }
+
+        int vehicleId = Integer.parseInt(input);
+        String details = vehicleController.getVehicleDetailsById(vehicleId);
+        System.out.println(details);
     }
 }

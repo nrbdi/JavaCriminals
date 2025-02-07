@@ -8,7 +8,12 @@ import repositories.VehicleRepository;
 
 public class Main {
     public static void main(String[] args) {
-        PostgresDB db = new PostgresDB("jdbc:postgresql://localhost:5433", "postgres", "1315162827", "Sale");
+        PostgresDB db = PostgresDB.getInstance(
+                "jdbc:postgresql://localhost:5433",
+                "postgres",
+                "1315162827",
+                "Sale"
+        );
 
         UserRepository userRepository = new UserRepository(db);
         VehicleRepository vehicleRepository = new VehicleRepository(db);

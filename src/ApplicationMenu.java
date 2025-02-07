@@ -1,9 +1,10 @@
-import models.User;
-import java.util.Scanner;
+import controllers.AdministrationController;
 import controllers.UserController;
 import controllers.VehicleController;
-import controllers.AdministrationController;
+import models.User;
 import utils.Validator;
+
+import java.util.Scanner;
 
 public class ApplicationMenu {
     private final UserController userController;
@@ -29,8 +30,13 @@ public class ApplicationMenu {
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String input = scanner.nextLine();
+            if (!input.matches("\\d+")) {
+                System.out.println("Error: Please enter a valid number.");
+                continue;
+            }
+
+            int choice = Integer.parseInt(input);
 
             switch (choice) {
                 case 1 -> addUser();

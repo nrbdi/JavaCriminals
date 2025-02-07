@@ -12,13 +12,17 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String phoneNumber, String password, String role, double cash) {
+    public User(String name, String email, String phoneNumber, String role, double cash) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.password = password;
         this.role = role;
         this.cash = cash;
+    }
+
+    public User(String name, String email, String phoneNumber, String password, String role, double cash) {
+        this(name, email, phoneNumber, role, cash);
+        this.password = password;
     }
 
     public User(int id, String name, String email, String phoneNumber, String password, String role, double cash) {

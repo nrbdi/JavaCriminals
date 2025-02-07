@@ -2,6 +2,7 @@ package controllers;
 
 import controllers.interfaces.IUserController;
 import models.User;
+import models.UserFactory;
 import repositories.interfaces.IUserRepository;
 import utils.Validator;
 
@@ -61,7 +62,7 @@ public class UserController implements IUserController {
             return "Error: Cash amount cannot be negative.";
         }
 
-        User user = new User(name, email, phoneNumber, password, role, cash);
+        User user = UserFactory.createUser(name, email, phoneNumber, password, role, cash);
         boolean created = userRepository.createUser(user);
         return created ? "User successfully created!" : "Failed to create user.";
     }
@@ -90,7 +91,8 @@ public class UserController implements IUserController {
             return "Error: Cash amount cannot be negative.";
         }
 
-        User user = new User(id, name, email, phoneNumber, password, role, cash);
+        User user = UserFactory.createUser(name, email, phoneNumber, password, role, cash);
+        user.setId(id); // Добавлено: установить ID для обновления
         boolean updated = userRepository.updateUser(user);
         return updated ? "User successfully updated!" : "Failed to update user.";
     }
@@ -104,7 +106,6 @@ public class UserController implements IUserController {
 
         return userRepository.getUserById(userId);
     }
-
 
     @Override
     public String getAllUsers() {

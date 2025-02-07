@@ -17,4 +17,6 @@ public interface IVehicleRepository {
     boolean isVehicleAvailable(int id);
 
     void printJoinedTableView();
+
+    String getVehicleDetailsById(int vehicleId);
 }

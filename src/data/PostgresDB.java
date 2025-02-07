@@ -7,51 +7,27 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresDB implements IDB {
+    private static PostgresDB instance;
     private String host;
     private String username;
     private String password;
     private String dnName;
-
     private Connection connection;
 
-    public PostgresDB(String host, String username, String password, String dnName) {
-        setHost(host);
-        setUsername(username);
-        setPassword(password);
-        setDnName(dnName);
-    }
-
-    public String getDnName() {
-        return dnName;
-    }
-
-    public void setDnName(String dnName) {
+    private PostgresDB(String host, String username, String password, String dnName) {
+        this.host = host;
+        this.username = username;
+        this.password = password;
         this.dnName = dnName;
     }
 
-    public String getPassword() {
-        return password;
+    public static synchronized PostgresDB getInstance(String host, String username, String password, String dnName) {
+        if (instance == null) {
+            instance = new PostgresDB(host, username, password, dnName);
+        }
+        return instance;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
     @Override
     public Connection getConnection() {
         String connectionUrl = host + "/" + dnName;
@@ -73,7 +49,7 @@ public class PostgresDB implements IDB {
         if (connection != null) {
             try {
                 connection.close();
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 System.out.println("Failed to close connection: " + e.getMessage());
             }
         }

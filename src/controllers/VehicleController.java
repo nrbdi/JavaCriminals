@@ -43,6 +43,31 @@ public class VehicleController implements IVehicleController {
     }
 
     @Override
+    public String getVehicleDetailsById(int vehicleId) {
+        if (!Validator.isPositiveInteger(vehicleId)) {
+            return "Error: Vehicle ID must be a positive number.";
+        }
+
+        Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
+        if (vehicle == null) {
+            return "Vehicle not found.";
+        }
+
+        String characteristics = vehicleRepository.getVehicleDetailsById(vehicleId);
+
+        return String.format(
+                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s\nCharacteristics:\n%s",
+                vehicle.getBrand(),
+                vehicle.getModel(),
+                vehicle.getVehicleType(),
+                vehicle.getPrice(),
+                vehicle.getReleaseYear(),
+                vehicle.getStatus(),
+                characteristics
+        );
+    }
+
+    @Override
     public String getVehiclesByType(String vehicleType) {
         List<Vehicle> vehicles = vehicleRepository.getVehiclesByType(vehicleType);
         if (vehicles.isEmpty()) {
@@ -165,10 +190,10 @@ public class VehicleController implements IVehicleController {
         if (user == null) return "User not found.";
         if (!"available".equalsIgnoreCase(vehicle.getStatus())) return "This vehicle is not available for reservation.";
 
-        boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "reserved", null);
+        boolean updated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "reserved", LocalDate.now());
         if (!updated) return "Failed to update vehicle status.";
 
-        return String.format("Reservation successful! Vehicle ID: %d has been reserved.", vehicleId);
+        return String.format("Reservation successful! Vehicle ID: %d has been reserved on %s.", vehicleId, LocalDate.now());
     }
 
     @Override

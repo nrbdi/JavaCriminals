@@ -10,4 +10,5 @@ public interface IVehicleController {
     String reserveVehicle(int vehicleId, int userId);
     void showJoinedTableView();
     String getVehicleById(int vehicleId);
+    String getVehicleDetailsById(int vehicleId);
 }
