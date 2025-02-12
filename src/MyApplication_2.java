@@ -34,6 +34,8 @@ public class MyApplication_2 {
             System.out.println("2. View user by ID");
             System.out.println("3. Delete a user");
             System.out.println("4. Show purchase & reservation report");
+            System.out.println("5. Update existing user");
+            System.out.println("6. Create admin/manager");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -45,6 +47,8 @@ public class MyApplication_2 {
                 case 2 -> viewUserById();
                 case 3 -> deleteUser();
                 case 4 -> showPurchaseReport();
+                case 5 -> updateUser();
+                case 6 -> createAdminOrManager();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -114,6 +118,57 @@ public class MyApplication_2 {
         scanner.nextLine();
 
         String response = adminController.deleteUser(userId);
+        System.out.println(response);
+    }
+
+    private void updateUser() {
+        System.out.print("Enter user ID to update: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter new name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter new email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter new phone number: ");
+        String phoneNumber = scanner.nextLine();
+
+        System.out.print("Enter new password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Enter new role (user/admin/manager): ");
+        String role = scanner.nextLine();
+
+        Double cash = null;
+        if (role.equalsIgnoreCase("user")) {
+            System.out.print("Enter new cash balance: ");
+            cash = scanner.nextDouble();
+            scanner.nextLine();
+        }
+
+        String response = adminController.updateUser(userId, name, email, phoneNumber, password, role, cash);
+        System.out.println(response);
+    }
+
+    private void createAdminOrManager() {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter phone number: ");
+        String phoneNumber = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Enter role (admin/manager): ");
+        String role = scanner.nextLine();
+
+        String response = adminController.createAdminOrManager(name, email, phoneNumber, password, role);
         System.out.println(response);
     }
 
