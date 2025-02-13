@@ -33,11 +33,12 @@ public class MyApplication_2 {
         while (true) {
             System.out.println("\nAdmin Menu:");
             System.out.println("1. View all users");
-            System.out.println("2. View user by ID");
-            System.out.println("3. Delete a user");
-            System.out.println("4. Show purchase & reservation report");
-            System.out.println("5. Update existing user");
-            System.out.println("6. Create admin/manager");
+            System.out.println("2. View all administration"); // Новый пункт
+            System.out.println("3. View user by ID");
+            System.out.println("4. Delete a user");
+            System.out.println("5. Show purchase & reservation report");
+            System.out.println("6. Update existing user");
+            System.out.println("7. Create admin/manager");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -46,11 +47,12 @@ public class MyApplication_2 {
 
             switch (choice) {
                 case 1 -> viewAllUsers();
-                case 2 -> viewUserById();
-                case 3 -> deleteUser();
-                case 4 -> showPurchaseReport();
-                case 5 -> updateUser();
-                case 6 -> createAdminOrManager();
+                case 2 -> viewAllAdministration(); // Новый метод
+                case 3 -> viewUserById();
+                case 4 -> deleteUser();
+                case 5 -> showPurchaseReport();
+                case 6 -> updateUser();
+                case 7 -> createAdminOrManager();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -59,6 +61,7 @@ public class MyApplication_2 {
             }
         }
     }
+
 
     private void managerMenu() {
         while (true) {
@@ -115,6 +118,12 @@ public class MyApplication_2 {
         String users = adminController.getAllUsers();
         System.out.println(users);
     }
+
+    private void viewAllAdministration() {
+        String administration = adminController.getAllAdministration();
+        System.out.println(administration);
+    }
+
 
     private void viewUserById() {
         System.out.print("Enter user ID: ");
@@ -237,15 +246,24 @@ public class MyApplication_2 {
 
     private void viewAllVehicles() {
         String vehicles = vehicleController.getAllVehicles();
-        System.out.println(vehicles);
+
+        if (vehicles == null || vehicles.isEmpty()) {
+            System.out.println("No vehicles available.");
+        } else {
+            System.out.println(vehicles);
+        }
     }
+
 
     private void viewVehicleById() {
         System.out.print("Enter vehicle ID: ");
         int vehicleId = scanner.nextInt();
         scanner.nextLine();
 
-        String vehicle = vehicleController.getVehicleById(vehicleId);
-        System.out.println(vehicle);
+        String vehicleDetails = vehicleController.getVehicleById(vehicleId);
+
+        if (vehicleDetails != null && !vehicleDetails.isEmpty()) {
+            System.out.println(vehicleDetails);
+        }
     }
 }

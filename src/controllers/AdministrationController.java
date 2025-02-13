@@ -90,7 +90,7 @@ public class AdministrationController implements IAdministrationController {
     }
 
     public String getAllUsers() {
-        List<String[]> users = adminRepository.getAllUsers(); // Теперь берёт только user
+        List<String[]> users = adminRepository.getAllUsers();
 
         if (users.isEmpty()) {
             return "No users found.";
@@ -142,5 +142,30 @@ public class AdministrationController implements IAdministrationController {
         }
         return adminRepository.getUserById(userId);
     }
+
+    public String getAllAdministration() {
+        List<String[]> adminsAndManagers = adminRepository.getAllAdministration();
+
+        if (adminsAndManagers.isEmpty()) {
+            return "No administrators or managers found.";
+        }
+
+        StringBuilder response = new StringBuilder();
+        String format = "| %-5s | %-20s | %-30s | %-15s |%n";
+        String separator = "+-------+----------------------+--------------------------------+-----------------+%n";
+
+        response.append(String.format(separator));
+        response.append(String.format(format, "ID", "Name", "Email", "Role"));
+        response.append(String.format(separator));
+
+        for (String[] admin : adminsAndManagers) {
+            response.append(String.format(format, admin[0], admin[1], admin[2], admin[3]));
+        }
+
+        response.append(String.format(separator));
+
+        return response.toString();
+    }
+
 
 }

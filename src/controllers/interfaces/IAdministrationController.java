@@ -19,5 +19,7 @@ public interface IAdministrationController {
 
     String getAllUsers();
 
+    String getAllAdministration();
+
     User getUserById(int userId);
 }

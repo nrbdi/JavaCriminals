@@ -207,4 +207,29 @@ public class AdministrationRepository implements IAdministrationRepository {
         }
         return null;
     }
+
+    @Override
+    public List<String[]> getAllAdministration() {
+        List<String[]> adminsAndManagers = new ArrayList<>();
+        String query = "SELECT id, name, email, role FROM users WHERE role IN ('admin', 'manager')";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                adminsAndManagers.add(new String[]{
+                        String.valueOf(rs.getInt("id")),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("role")
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Error (getAllAdministration): " + e.getMessage());
+        }
+
+        return adminsAndManagers;
+    }
+
 }
