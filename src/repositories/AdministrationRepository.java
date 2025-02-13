@@ -46,8 +46,8 @@ public class AdministrationRepository implements IAdministrationRepository {
             if (rs.next()) {
                 int vehicleId = rs.getInt("id");
 
-                String charSql = "INSERT INTO public.\"Characteristics\" (vehicle_id, engine_power, fuel_type, transmission, color, mileage) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                String charSql = "INSERT INTO public.\"Characteristics\" (vehicle_id, engine_power, fuel_type, transmission, color, mileage, camera_360, cruise_control, autopilot) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement charSt = conn.prepareStatement(charSql);
                 charSt.setInt(1, vehicleId);
                 charSt.setDouble(2, characteristics.getEnginePower());
@@ -55,6 +55,9 @@ public class AdministrationRepository implements IAdministrationRepository {
                 charSt.setString(4, characteristics.getTransmission());
                 charSt.setString(5, characteristics.getColor());
                 charSt.setDouble(6, characteristics.getMileage());
+                charSt.setString(7, characteristics.getCamera360());
+                charSt.setString(8, characteristics.getCruiseControl());
+                charSt.setString(9, characteristics.getAutopilot());
 
                 return charSt.executeUpdate() > 0;
             }

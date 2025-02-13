@@ -15,8 +15,18 @@ public class CharacteristicsController implements ICharacteristicsController {
     public String getCharacteristicsByVehicleId(int vehicleId) {
         Characteristics characteristics = repo.getCharacteristicsByVehicleId(vehicleId);
         if (characteristics == null) {
-            return null;
+            return "No characteristics found for this vehicle.";
         }
-        return characteristics.toString();
+        return String.format(
+                "Engine Power: %.1f L\nFuel Type: %s\nTransmission: %s\nColor: %s\nMileage: %.1f km\n360 Camera: %s\nCruise Control: %s\nAutopilot: %s",
+                characteristics.getEnginePower(),
+                characteristics.getFuelType(),
+                characteristics.getTransmission(),
+                characteristics.getColor(),
+                characteristics.getMileage(),
+                characteristics.getCamera360(),
+                characteristics.getCruiseControl(),
+                characteristics.getAutopilot()
+        );
     }
 }

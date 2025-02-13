@@ -94,7 +94,6 @@ public class MyApplication_2 {
         System.out.println("                    Purchase & Reservation Report                         ");
         System.out.println("==========================================================================");
 
-        // Верхняя граница таблицы
         System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
         System.out.println("| ID   | User Name            | Email                        | Brand       | Model       | Price      | Status      | Purchase Date  |");
         System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
@@ -109,7 +108,6 @@ public class MyApplication_2 {
                         row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
             }
         }
-        // Нижняя граница таблицы
         System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
     }
 
@@ -135,7 +133,6 @@ public class MyApplication_2 {
             System.out.printf("| Phone    : %s%n", user.getPhoneNumber());
             System.out.printf("| Role     : %s%n", user.getRole());
 
-            // Баланс показываем только если это обычный пользователь
             if (user.getRole().equalsIgnoreCase("user")) {
                 System.out.printf("| Balance  : %.2f%n", user.getCash());
             }
@@ -216,7 +213,16 @@ public class MyApplication_2 {
         int year = scanner.nextInt();
         scanner.nextLine();
 
-        String response = adminController.addVehicle(brand, model, type, price, year);
+        System.out.print("Enter 360 Camera (Yes/No): ");
+        String camera360 = scanner.nextLine();
+
+        System.out.print("Enter Cruise Control (Standard/Adaptive/None): ");
+        String cruiseControl = scanner.nextLine();
+
+        System.out.print("Enter Autopilot (Enabled/Disabled): ");
+        String autopilot = scanner.nextLine();
+
+        String response = adminController.addVehicle(brand, model, type, price, year, camera360, cruiseControl, autopilot);
         System.out.println(response);
     }
 

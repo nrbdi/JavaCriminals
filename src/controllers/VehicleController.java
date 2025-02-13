@@ -127,6 +127,7 @@ public class VehicleController implements IVehicleController {
 
     @Override
     public String getVehicleById(int vehicleId) {
+        System.out.println("Fetching vehicle details including characteristics...");
         if (!Validator.isPositiveInteger(vehicleId)) {
             return "Error: Vehicle ID must be a positive number.";
         }
@@ -136,14 +137,20 @@ public class VehicleController implements IVehicleController {
             return "Vehicle not found.";
         }
 
+        String characteristics = vehicleRepository.getVehicleDetailsById(vehicleId);
+        if (characteristics.equals("Vehicle not found.")) {
+            characteristics = "No additional characteristics available.";
+        }
+
         return String.format(
-                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s",
+                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s\n%s",
                 vehicle.getBrand(),
                 vehicle.getModel(),
                 vehicle.getVehicleType(),
                 vehicle.getPrice(),
                 vehicle.getReleaseYear(),
-                vehicle.getStatus()
+                vehicle.getStatus(),
+                characteristics
         );
     }
 

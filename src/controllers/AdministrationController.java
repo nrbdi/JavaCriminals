@@ -29,7 +29,7 @@ public class AdministrationController implements IAdministrationController {
     }
 
     @Override
-    public String addVehicle(String brand, String model, String type, double price, int year) {
+    public String addVehicle(String brand, String model, String type, double price, int year, String camera360, String cruiseControl, String autopilot) {
         System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
         double enginePower = scanner.nextDouble();
         scanner.nextLine();
@@ -49,7 +49,7 @@ public class AdministrationController implements IAdministrationController {
 
         Vehicle vehicle = new Vehicle(brand, model, type, price, year, "available");
         Characteristics characteristics = new Characteristics(
-                vehicle.getId(), enginePower, fuelType, transmission, color, mileage
+                vehicle.getId(), enginePower, fuelType, transmission, color, mileage, camera360, cruiseControl, autopilot
         );
 
         boolean success = adminRepository.addVehicle(vehicle, characteristics);

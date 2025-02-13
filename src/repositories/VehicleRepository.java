@@ -82,7 +82,8 @@ public class VehicleRepository implements IVehicleRepository {
         try (Connection conn = db.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "SELECT v.id, v.brand, v.model, v.vehicle_type, v.price, v.release_year, " +
-                             "c.engine_power, c.fuel_type, c.transmission, c.color, c.mileage " +
+                             "c.engine_power, c.fuel_type, c.transmission, c.color, c.mileage, " +
+                             "c.camera_360, c.cruise_control, c.autopilot " +
                              "FROM public.\"Vehicle\" v " +
                              "JOIN public.\"Characteristics\" c ON v.id = c.vehicle_id " +
                              "WHERE v.id = ?")) {
@@ -90,18 +91,21 @@ public class VehicleRepository implements IVehicleRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return String.format("""
-                        Vehicle Details:
-                        - Brand: %s
-                        - Model: %s
-                        - Type: %s
-                        - Price: %.2f
-                        - Release Year: %d
-                        - Engine Power: %.1f L
-                        - Fuel Type: %s
-                        - Transmission: %s
-                        - Color: %s
-                        - Mileage: %.1f km""",
+                return String.format(
+                        "Vehicle Details:\n" +
+                                "- Brand: %s\n" +
+                                "- Model: %s\n" +
+                                "- Type: %s\n" +
+                                "- Price: %.2f\n" +
+                                "- Release Year: %d\n" +
+                                "- Engine Power: %.1f L\n" +
+                                "- Fuel Type: %s\n" +
+                                "- Transmission: %s\n" +
+                                "- Color: %s\n" +
+                                "- Mileage: %.1f km\n" +
+                                "- 360 Camera: %s\n" +
+                                "- Cruise Control: %s\n" +
+                                "- Autopilot: %s",
                         resultSet.getString("brand"),
                         resultSet.getString("model"),
                         resultSet.getString("vehicle_type"),
@@ -111,7 +115,11 @@ public class VehicleRepository implements IVehicleRepository {
                         resultSet.getString("fuel_type"),
                         resultSet.getString("transmission"),
                         resultSet.getString("color"),
-                        resultSet.getDouble("mileage"));
+                        resultSet.getDouble("mileage"),
+                        resultSet.getString("camera_360"),
+                        resultSet.getString("cruise_control"),
+                        resultSet.getString("autopilot")
+                );
             } else {
                 return "Vehicle not found.";
             }

@@ -32,7 +32,10 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
                         rs.getString("fuel_type"),
                         rs.getString("transmission"),
                         rs.getString("color"),
-                        rs.getDouble("mileage")
+                        rs.getDouble("mileage"),
+                        rs.getString("camera_360"),
+                        rs.getString("cruise_control"),
+                        rs.getString("autopilot")
                 );
             }
         } catch (SQLException e) {
@@ -55,7 +58,10 @@ public class CharacteristicsRepository implements ICharacteristicsRepository {
                         rs.getString("fuel_type"),
                         rs.getString("transmission"),
                         rs.getString("color"),
-                        rs.getDouble("mileage")
+                        rs.getDouble("mileage"),
+                        rs.getString("camera_360"),
+                        rs.getString("cruise_control"),
+                        rs.getString("autopilot")
                 ));
             }
         } catch (SQLException e) {
