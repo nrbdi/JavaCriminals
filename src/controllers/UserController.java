@@ -6,8 +6,6 @@ import models.UserFactory;
 import repositories.interfaces.IUserRepository;
 import utils.Validator;
 
-import java.util.List;
-
 public class UserController implements IUserController {
     private final IUserRepository userRepository;
 
@@ -65,41 +63,5 @@ public class UserController implements IUserController {
         User user = UserFactory.createUser(name, email, phoneNumber, password, role, cash);
         boolean created = userRepository.createUser(user);
         return created ? "User successfully created!" : "Failed to create user.";
-    }
-
-    @Override
-    public User getUserById(int userId) {
-        if (!Validator.isPositiveInteger(userId)) {
-            System.out.println("Error: User ID must be a positive number.");
-            return null;
-        }
-
-        return userRepository.getUserById(userId);
-    }
-
-    @Override
-    public String getAllUsers() {
-        List<User> users = userRepository.getAllUsers();
-        if (users.isEmpty()) {
-            return "No users found.";
-        }
-        StringBuilder response = new StringBuilder("List of users:\n");
-        for (User user : users) {
-            response.append(user).append("\n");
-        }
-        return response.toString();
-    }
-
-    @Override
-    public boolean updateUserBalance(int userId, double newBalance) {
-        if (!Validator.isPositiveInteger(userId)) {
-            System.out.println("Error: User ID must be a positive number.");
-            return false;
-        }
-        if (!Validator.isPositiveNumber(newBalance)) {
-            System.out.println("Error: Balance must be a positive number.");
-            return false;
-        }
-        return userRepository.updateUserBalance(userId, newBalance);
     }
 }

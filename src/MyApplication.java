@@ -21,7 +21,7 @@ public class MyApplication {
             System.out.println("3. Filter vehicles by brand");
             System.out.println("4. Purchase a vehicle");
             System.out.println("5. Reserve a vehicle");
-            System.out.println("6. View vehicle details by ID"); // ✅ Новый пункт
+            System.out.println("6. View vehicle details by ID");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
@@ -34,7 +34,7 @@ public class MyApplication {
                 case 3 -> filterVehiclesByBrand();
                 case 4 -> purchaseVehicle();
                 case 5 -> reserveVehicle();
-                case 6 -> viewVehicleDetailsById(); // ✅ Вызываем метод
+                case 6 -> viewVehicleDetailsById();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;

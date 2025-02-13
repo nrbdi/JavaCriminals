@@ -1,6 +1,8 @@
 import controllers.AdministrationController;
 import controllers.VehicleController;
 import controllers.UserController;
+
+import java.util.List;
 import java.util.Scanner;
 import models.User;
 
@@ -88,8 +90,27 @@ public class MyApplication_2 {
     }
 
     private void showPurchaseReport() {
-        System.out.println("\nFetching purchase and reservation report...");
-        vehicleController.showJoinedTableView();
+        System.out.println("\n==========================================================================");
+        System.out.println("                    Purchase & Reservation Report                         ");
+        System.out.println("==========================================================================");
+
+        // Верхняя граница таблицы
+        System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
+        System.out.println("| ID   | User Name            | Email                        | Brand       | Model       | Price      | Status      | Purchase Date  |");
+        System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
+
+        List<String[]> report = adminController.getPurchaseAndReservationReport();
+
+        if (report.isEmpty()) {
+            System.out.println("| No purchased or reserved vehicles found.                                                                      |");
+        } else {
+            for (String[] row : report) {
+                System.out.printf("| %-4s | %-20s | %-28s | %-11s | %-11s | $%-9s | %-11s | %-14s |\n",
+                        row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+            }
+        }
+        // Нижняя граница таблицы
+        System.out.println("+------+----------------------+------------------------------+-------------+-------------+------------+-------------+----------------+");
     }
 
     private void viewAllUsers() {
@@ -102,15 +123,25 @@ public class MyApplication_2 {
         int userId = scanner.nextInt();
         scanner.nextLine();
 
-        User user = userController.getUserById(userId);
+        User user = adminController.getUserById(userId);
         if (user == null) {
             System.out.println("User not found.");
         } else {
-            System.out.printf("User Details:\n- Name: %s\n- Email: %s\n- Phone: %s\n- Role: %s\n- Balance: %.2f%n",
-                    user.getName(), user.getEmail(), user.getPhoneNumber(), user.getRole(), user.getCash());
+            System.out.println("\n=========================");
+            System.out.println("       User Details      ");
+            System.out.println("=========================");
+            System.out.printf("| Name     : %s%n", user.getName());
+            System.out.printf("| Email    : %s%n", user.getEmail());
+            System.out.printf("| Phone    : %s%n", user.getPhoneNumber());
+            System.out.printf("| Role     : %s%n", user.getRole());
+
+            // Баланс показываем только если это обычный пользователь
+            if (user.getRole().equalsIgnoreCase("user")) {
+                System.out.printf("| Balance  : %.2f%n", user.getCash());
+            }
+            System.out.println("=========================\n");
         }
     }
-
 
     private void deleteUser() {
         System.out.print("Enter user ID to delete: ");

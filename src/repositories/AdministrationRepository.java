@@ -6,9 +6,9 @@ import models.User;
 import models.Vehicle;
 import repositories.interfaces.IAdministrationRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdministrationRepository implements IAdministrationRepository {
     private final IDB db;
@@ -122,4 +122,86 @@ public class AdministrationRepository implements IAdministrationRepository {
         return false;
     }
 
+    @Override
+    public List<String[]> getPurchaseAndReservationReport() {
+        List<String[]> report = new ArrayList<>();
+        String sql = "SELECT u.id AS user_id, u.name AS user_name, u.email AS user_email, " +
+                "v.brand AS vehicle_brand, v.model AS vehicle_model, v.price AS vehicle_price, " +
+                "v.status AS vehicle_status, v.purchase_date " +
+                "FROM public.\"users\" u " +
+                "LEFT JOIN public.\"Vehicle\" v ON u.id = v.user_id " +
+                "WHERE v.status IN ('reserved', 'sold')";
+
+        try (Connection conn = db.getConnection();
+             Statement statement = conn.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                report.add(new String[]{
+                        String.valueOf(resultSet.getInt("user_id")),
+                        resultSet.getString("user_name"),
+                        resultSet.getString("user_email"),
+                        resultSet.getString("vehicle_brand"),
+                        resultSet.getString("vehicle_model"),
+                        String.format("$%.2f", resultSet.getDouble("vehicle_price")),
+                        resultSet.getString("vehicle_status"),
+                        resultSet.getDate("purchase_date") != null ?
+                                resultSet.getDate("purchase_date").toLocalDate().toString() : "N/A"
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Error (getPurchaseAndReservationReport): " + e.getMessage());
+        }
+        return report;
+    }
+
+    @Override
+    public List<String[]> getAllUsers() {
+        List<String[]> users = new ArrayList<>();
+        String query = "SELECT id, name, email, phone_number, cash FROM users WHERE role = 'user'";
+
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new String[]{
+                        String.valueOf(rs.getInt("id")),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        String.format("%.2f", rs.getDouble("cash"))
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        try (Connection conn = db.getConnection()) {
+            String sql = "SELECT * FROM public.\"users\" WHERE id = ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getDouble("cash")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+        return null;
+    }
 }

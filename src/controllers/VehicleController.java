@@ -1,6 +1,7 @@
 package controllers;
 
-import controllers.interfaces.IUserController;
+import controllers.interfaces.IAdministrationController;
+import controllers.interfaces.IUserFinanceController;
 import controllers.interfaces.IVehicleController;
 import models.User;
 import models.Vehicle;
@@ -12,11 +13,13 @@ import java.util.List;
 
 public class VehicleController implements IVehicleController {
     private final IVehicleRepository vehicleRepository;
-    private final IUserController userController;
+    private final IAdministrationController adminController;
+    private final IUserFinanceController financeController;
 
-    public VehicleController(IVehicleRepository vehicleRepository, IUserController userController) {
+    public VehicleController(IVehicleRepository vehicleRepository, IAdministrationController adminController, IUserFinanceController financeController) {
         this.vehicleRepository = vehicleRepository;
-        this.userController = userController;
+        this.adminController = adminController;
+        this.financeController = financeController;
     }
 
     @Override
@@ -154,7 +157,7 @@ public class VehicleController implements IVehicleController {
         }
 
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        User user = userController.getUserById(userId);
+        User user = adminController.getUserById(userId); // Теперь используем adminController
 
         if (vehicle == null) return "Vehicle not found.";
         if (user == null) return "User not found.";
@@ -162,7 +165,7 @@ public class VehicleController implements IVehicleController {
         if (user.getCash() < vehicle.getPrice()) return "Insufficient funds to purchase this vehicle.";
 
         double newBalance = user.getCash() - vehicle.getPrice();
-        boolean balanceUpdated = userController.updateUserBalance(userId, newBalance);
+        boolean balanceUpdated = financeController.updateUserBalance(userId, newBalance);
         if (!balanceUpdated) return "Failed to update user balance.";
 
         boolean vehicleUpdated = vehicleRepository.updateVehicleStatus(vehicleId, userId, "sold", LocalDate.now());
@@ -184,7 +187,7 @@ public class VehicleController implements IVehicleController {
         }
 
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        User user = userController.getUserById(userId);
+        User user = adminController.getUserById(userId); // Теперь используем adminController
 
         if (vehicle == null) return "Vehicle not found.";
         if (user == null) return "User not found.";

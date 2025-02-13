@@ -8,6 +8,7 @@ import models.Vehicle;
 import repositories.interfaces.IAdministrationRepository;
 import utils.Validator;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AdministrationController implements IAdministrationController {
@@ -89,8 +90,29 @@ public class AdministrationController implements IAdministrationController {
     }
 
     public String getAllUsers() {
-        return userController.getAllUsers();
+        List<String[]> users = adminRepository.getAllUsers(); // Теперь берёт только user
+
+        if (users.isEmpty()) {
+            return "No users found.";
+        }
+
+        StringBuilder response = new StringBuilder();
+        String format = "| %-5s | %-20s | %-30s | %-15s | %-10s |%n";
+        String separator = "+-------+----------------------+--------------------------------+-----------------+------------+%n";
+
+        response.append(String.format(separator));
+        response.append(String.format(format, "ID", "Name", "Email", "Phone Number", "Cash"));
+        response.append(String.format(separator));
+
+        for (String[] user : users) {
+            response.append(String.format(format, user[0], user[1], user[2], user[3], user[4]));
+        }
+
+        response.append(String.format(separator));
+
+        return response.toString();
     }
+
 
     public String createAdminOrManager(String name, String email, String phoneNumber, String password, String role) {
         if (!role.equalsIgnoreCase("admin") && !role.equalsIgnoreCase("manager")) {
@@ -106,6 +128,19 @@ public class AdministrationController implements IAdministrationController {
             System.out.println("Error: Failed to create admin/manager. Check database constraints or duplicates.");
             return "Failed to create admin/manager.";
         }
+    }
+
+    public List<String[]> getPurchaseAndReservationReport() {
+        return adminRepository.getPurchaseAndReservationReport();
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        if (!Validator.isPositiveInteger(userId)) {
+            System.out.println("Error: User ID must be a positive number.");
+            return null;
+        }
+        return adminRepository.getUserById(userId);
     }
 
 }

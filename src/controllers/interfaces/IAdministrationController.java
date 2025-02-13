@@ -1,5 +1,9 @@
 package controllers.interfaces;
 
+import models.User;
+
+import java.util.List;
+
 public interface IAdministrationController {
     String deleteUser(int userId);
 
@@ -10,4 +14,10 @@ public interface IAdministrationController {
     String updateUser(int id, String name, String email, String phoneNumber, String password, String role, Double cash);
 
     String createAdminOrManager(String name, String email, String phoneNumber, String password, String role);
+
+    List<String[]> getPurchaseAndReservationReport();
+
+    String getAllUsers();
+
+    User getUserById(int userId);
 }
