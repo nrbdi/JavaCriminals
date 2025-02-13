@@ -1,12 +1,12 @@
 import controllers.AdministrationController;
 import controllers.UserController;
-import controllers.VehicleController;
 import controllers.UserFinanceController;
+import controllers.VehicleController;
 import data.PostgresDB;
 import repositories.AdministrationRepository;
+import repositories.UserFinanceRepository;
 import repositories.UserRepository;
 import repositories.VehicleRepository;
-import repositories.UserFinanceRepository;
 
 public class Main {
     public static void main(String[] args) {

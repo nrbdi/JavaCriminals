@@ -56,10 +56,10 @@ public class ApplicationMenu {
         do {
             System.out.println("Enter name:");
             name = scanner.nextLine();
-            if (!Validator.isNonEmpty(name)) {
-                System.out.println("Error: Name cannot be empty!");
+            if (!Validator.isValidName(name)) {
+                System.out.println("Error: Name must contain only letters (Latin or Cyrillic)!");
             }
-        } while (!Validator.isNonEmpty(name));
+        } while (!Validator.isValidName(name));
 
         do {
             System.out.println("Enter email:");
@@ -72,10 +72,10 @@ public class ApplicationMenu {
         do {
             System.out.println("Enter phone number:");
             phoneNumber = scanner.nextLine();
-            if (!Validator.isNonEmpty(phoneNumber)) {
-                System.out.println("Error: Phone number cannot be empty!");
+            if (!Validator.isValidPhoneNumber(phoneNumber)) {
+                System.out.println("Error: Phone number must start with 8 or +7 and contain exactly 11 digits.");
             }
-        } while (!Validator.isNonEmpty(phoneNumber));
+        } while (!Validator.isValidPhoneNumber(phoneNumber));
 
         do {
             System.out.println("Enter password:");
@@ -87,6 +87,10 @@ public class ApplicationMenu {
 
         do {
             System.out.println("Enter cash amount:");
+            while (!scanner.hasNextDouble()) {
+                System.out.println("Error: Please enter a valid cash amount.");
+                scanner.next();
+            }
             cash = scanner.nextDouble();
             scanner.nextLine();
             if (!Validator.isPositiveNumber(cash)) {
@@ -98,6 +102,7 @@ public class ApplicationMenu {
         String response = userController.createUser(name, email, phoneNumber, password, role, cash);
         System.out.println(response);
     }
+
 
     private void loginAndRedirect() {
         String email, password;

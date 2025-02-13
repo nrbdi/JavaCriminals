@@ -7,7 +7,9 @@ import java.util.List;
 public interface IAdministrationController {
     String deleteUser(int userId);
 
-    String addVehicle(String brand, String model, String type, double price, int year, String camera360, String cruiseControl, String autopilot);
+    String addVehicle(String brand, String model, String type, double price, int year,
+                      String camera360, String cruiseControl, String autopilot,
+                      double enginePower, String fuelType, String transmission, String color, double mileage);
 
     String deleteVehicle(int vehicleId);
 

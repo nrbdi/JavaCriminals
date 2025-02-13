@@ -14,6 +14,6 @@ public interface IAdministrationRepository {
     boolean createAdminOrManager(User user);
     List<String[]> getPurchaseAndReservationReport();
     List<String[]> getAllUsers();
-    List<String[]> getAllAdministration(); // 🔥 Добавляем новый метод
+    List<String[]> getAllAdministration(); //
     User getUserById(int id);
 }

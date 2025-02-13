@@ -1,5 +1,6 @@
 import controllers.VehicleController;
 import models.User;
+
 import java.util.Scanner;
 
 public class MyApplication {
@@ -25,8 +26,13 @@ public class MyApplication {
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String input = scanner.nextLine();  // Читаем ввод как строку
+            if (!input.matches("\\d+")) { // Проверяем, что ввод - это число
+                System.out.println("Error: Please enter a valid number.");
+                continue;
+            }
+
+            int choice = Integer.parseInt(input); // Преобразуем строку в число
 
             switch (choice) {
                 case 1 -> viewAllVehicles();
@@ -43,6 +49,7 @@ public class MyApplication {
             }
         }
     }
+
 
     private void viewAllVehicles() {
         String vehicles = vehicleController.getAllVehicles();
@@ -93,7 +100,6 @@ public class MyApplication {
         int vehicleId = Integer.parseInt(input);
         String details = vehicleController.getVehicleDetailsById(vehicleId);
 
-        // Убираем лишний заголовок "Vehicle Details:"
         if (details != null && !details.isEmpty()) {
             System.out.println(details);
         }

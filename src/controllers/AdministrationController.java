@@ -29,23 +29,48 @@ public class AdministrationController implements IAdministrationController {
     }
 
     @Override
-    public String addVehicle(String brand, String model, String type, double price, int year, String camera360, String cruiseControl, String autopilot) {
-        System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
-        double enginePower = scanner.nextDouble();
-        scanner.nextLine();
+    public String addVehicle(String brand, String model, String type, double price, int year,
+                             String camera360, String cruiseControl, String autopilot,
+                             double enginePower, String fuelType, String transmission, String color, double mileage) {
 
-        System.out.print("Enter fuel type: ");
-        String fuelType = scanner.nextLine();
+        if (!Validator.isValidTypeOrColor(brand)) {
+            return "Error: Brand can only contain letters!";
+        }
 
-        System.out.print("Enter transmission type: ");
-        String transmission = scanner.nextLine();
+        if (!Validator.isValidBrandOrModel(model)) {
+            return "Error: Model can only contain letters and numbers!";
+        }
 
-        System.out.print("Enter color: ");
-        String color = scanner.nextLine();
+        if (!Validator.isValidTypeOrColor(type)) {
+            return "Error: Vehicle type can only contain letters!";
+        }
 
-        System.out.print("Enter mileage (km): ");
-        double mileage = scanner.nextDouble();
-        scanner.nextLine();
+        if (!Validator.isPositiveNumber(price)) {
+            return "Error: Price must be a positive number!";
+        }
+
+        if (!Validator.isPositiveInteger(year)) {
+            return "Error: Release year must be a positive number!";
+        }
+
+        if (!Validator.isPositiveNumber(enginePower)) {
+            return "Error: Engine power must be a positive number!";
+        }
+
+        if (!Validator.isPositiveNumber(mileage)) {
+            return "Error: Mileage must be a positive number!";
+        }
+
+        if (!fuelType.equalsIgnoreCase("Petrol") &&
+                !fuelType.equalsIgnoreCase("Diesel") &&
+                !fuelType.equalsIgnoreCase("Electric") &&
+                !fuelType.equalsIgnoreCase("Hybrid")) {
+            return "Error: Fuel type can only be 'Petrol', 'Diesel', 'Electric', or 'Hybrid'!";
+        }
+
+        if (!transmission.equalsIgnoreCase("Manual") && !transmission.equalsIgnoreCase("Automatic")) {
+            return "Error: Transmission type can only be 'Manual' or 'Automatic'!";
+        }
 
         Vehicle vehicle = new Vehicle(brand, model, type, price, year, "available");
         Characteristics characteristics = new Characteristics(
@@ -55,6 +80,7 @@ public class AdministrationController implements IAdministrationController {
         boolean success = adminRepository.addVehicle(vehicle, characteristics);
         return success ? "Vehicle successfully added!" : "Failed to add vehicle.";
     }
+
 
     @Override
     public String updateUser(int id, String name, String email, String phoneNumber, String password, String role, Double cash) {
