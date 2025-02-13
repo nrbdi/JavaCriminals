@@ -1,8 +1,7 @@
 package repositories;
 
-import models.UserFinance;
-import repositories.interfaces.IUserFinanceRepository;
 import data.interfaces.IDB;
+import repositories.interfaces.IUserFinanceRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

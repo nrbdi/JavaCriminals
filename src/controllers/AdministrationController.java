@@ -31,41 +31,19 @@ public class AdministrationController implements IAdministrationController {
     @Override
     public String addVehicle(String brand, String model, String type, double price, int year, String camera360, String cruiseControl, String autopilot) {
         System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
-        if (!scanner.hasNextDouble()) {
-            System.out.println("Error: Please enter a valid engine power.");
-            scanner.nextLine();
-            return "Failed to add vehicle.";
-        }
         double enginePower = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.print("Enter fuel type (e.g., Petrol, Diesel, Electric): ");
+        System.out.print("Enter fuel type: ");
         String fuelType = scanner.nextLine();
-        if (!Validator.isValidName(fuelType)) {
-            System.out.println("Error: Fuel type must contain only letters.");
-            return "Failed to add vehicle.";
-        }
 
-        System.out.print("Enter transmission type (Manual/Automatic): ");
+        System.out.print("Enter transmission type: ");
         String transmission = scanner.nextLine();
-        if (!transmission.equalsIgnoreCase("Manual") && !transmission.equalsIgnoreCase("Automatic")) {
-            System.out.println("Error: Please enter 'Manual' or 'Automatic'.");
-            return "Failed to add vehicle.";
-        }
 
         System.out.print("Enter color: ");
         String color = scanner.nextLine();
-        if (!Validator.isValidName(color)) {
-            System.out.println("Error: Color must contain only letters.");
-            return "Failed to add vehicle.";
-        }
 
         System.out.print("Enter mileage (km): ");
-        if (!scanner.hasNextDouble()) {
-            System.out.println("Error: Please enter a valid mileage.");
-            scanner.nextLine();
-            return "Failed to add vehicle.";
-        }
         double mileage = scanner.nextDouble();
         scanner.nextLine();
 

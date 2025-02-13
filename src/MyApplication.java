@@ -92,6 +92,10 @@ public class MyApplication {
 
         int vehicleId = Integer.parseInt(input);
         String details = vehicleController.getVehicleDetailsById(vehicleId);
-        System.out.println(details);
+
+        // Убираем лишний заголовок "Vehicle Details:"
+        if (details != null && !details.isEmpty()) {
+            System.out.println(details);
+        }
     }
 }
