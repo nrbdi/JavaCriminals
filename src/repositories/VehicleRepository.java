@@ -92,8 +92,7 @@ public class VehicleRepository implements IVehicleRepository {
 
             if (resultSet.next()) {
                 return String.format(
-                        "Vehicle Details:\n" +
-                                "- Brand: %s\n" +
+                        "- Brand: %s\n" +  // 🔥 Убрали "Vehicle Details:\n"
                                 "- Model: %s\n" +
                                 "- Type: %s\n" +
                                 "- Price: %.2f\n" +
@@ -128,6 +127,7 @@ public class VehicleRepository implements IVehicleRepository {
             return "Error retrieving vehicle details.";
         }
     }
+
 
     @Override
     public boolean updateVehicleStatus(int id, int userId, String status, LocalDate purchaseDate) {

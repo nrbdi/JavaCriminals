@@ -31,19 +31,41 @@ public class AdministrationController implements IAdministrationController {
     @Override
     public String addVehicle(String brand, String model, String type, double price, int year, String camera360, String cruiseControl, String autopilot) {
         System.out.print("Enter engine power (e.g., 2.4 or 3.5): ");
+        if (!scanner.hasNextDouble()) {
+            System.out.println("Error: Please enter a valid engine power.");
+            scanner.nextLine();
+            return "Failed to add vehicle.";
+        }
         double enginePower = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.print("Enter fuel type: ");
+        System.out.print("Enter fuel type (e.g., Petrol, Diesel, Electric): ");
         String fuelType = scanner.nextLine();
+        if (!Validator.isValidName(fuelType)) {
+            System.out.println("Error: Fuel type must contain only letters.");
+            return "Failed to add vehicle.";
+        }
 
-        System.out.print("Enter transmission type: ");
+        System.out.print("Enter transmission type (Manual/Automatic): ");
         String transmission = scanner.nextLine();
+        if (!transmission.equalsIgnoreCase("Manual") && !transmission.equalsIgnoreCase("Automatic")) {
+            System.out.println("Error: Please enter 'Manual' or 'Automatic'.");
+            return "Failed to add vehicle.";
+        }
 
         System.out.print("Enter color: ");
         String color = scanner.nextLine();
+        if (!Validator.isValidName(color)) {
+            System.out.println("Error: Color must contain only letters.");
+            return "Failed to add vehicle.";
+        }
 
         System.out.print("Enter mileage (km): ");
+        if (!scanner.hasNextDouble()) {
+            System.out.println("Error: Please enter a valid mileage.");
+            scanner.nextLine();
+            return "Failed to add vehicle.";
+        }
         double mileage = scanner.nextDouble();
         scanner.nextLine();
 
@@ -90,7 +112,7 @@ public class AdministrationController implements IAdministrationController {
     }
 
     public String getAllUsers() {
-        List<String[]> users = adminRepository.getAllUsers(); // Теперь берёт только user
+        List<String[]> users = adminRepository.getAllUsers();
 
         if (users.isEmpty()) {
             return "No users found.";
@@ -142,5 +164,30 @@ public class AdministrationController implements IAdministrationController {
         }
         return adminRepository.getUserById(userId);
     }
+
+    public String getAllAdministration() {
+        List<String[]> adminsAndManagers = adminRepository.getAllAdministration();
+
+        if (adminsAndManagers.isEmpty()) {
+            return "No administrators or managers found.";
+        }
+
+        StringBuilder response = new StringBuilder();
+        String format = "| %-5s | %-20s | %-30s | %-15s |%n";
+        String separator = "+-------+----------------------+--------------------------------+-----------------+%n";
+
+        response.append(String.format(separator));
+        response.append(String.format(format, "ID", "Name", "Email", "Role"));
+        response.append(String.format(separator));
+
+        for (String[] admin : adminsAndManagers) {
+            response.append(String.format(format, admin[0], admin[1], admin[2], admin[3]));
+        }
+
+        response.append(String.format(separator));
+
+        return response.toString();
+    }
+
 
 }

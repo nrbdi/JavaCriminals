@@ -29,21 +29,31 @@ public class VehicleController implements IVehicleController {
             return "No vehicles available.";
         }
 
-        StringBuilder sb = new StringBuilder("List of vehicles:\n");
+        String format = "| %-4s | %-10s | %-12s | %-12s | %-10s | %-12s | %-10s |%n";
+        String separator = "+----+------------+--------------+--------------+------------+--------------+------------+%n";
+
+        StringBuilder table = new StringBuilder();
+        table.append(String.format(separator));
+        table.append(String.format(format, "ID", "Brand", "Model", "Type", "Price", "Year", "Status"));
+        table.append(String.format(separator));
+
         for (Vehicle vehicle : vehicles) {
-            sb.append(String.format(
-                    "ID: %d\nBrand: %s\nModel: %s\nType: %s\nPrice: %.2f\nRelease Year: %d\nStatus: %s\n\n",
+            table.append(String.format(format,
                     vehicle.getId(),
                     vehicle.getBrand(),
                     vehicle.getModel(),
                     vehicle.getVehicleType(),
-                    vehicle.getPrice(),
+                    String.format("%.2f", vehicle.getPrice()),
                     vehicle.getReleaseYear(),
                     vehicle.getStatus()
             ));
         }
-        return sb.toString();
+
+        table.append(String.format(separator));
+
+        return table.toString();
     }
+
 
     @Override
     public String getVehicleDetailsById(int vehicleId) {
@@ -51,24 +61,14 @@ public class VehicleController implements IVehicleController {
             return "Error: Vehicle ID must be a positive number.";
         }
 
-        Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        if (vehicle == null) {
+        String vehicleDetails = vehicleRepository.getVehicleDetailsById(vehicleId);
+        if (vehicleDetails.equals("Vehicle not found.")) {
             return "Vehicle not found.";
         }
 
-        String characteristics = vehicleRepository.getVehicleDetailsById(vehicleId);
-
-        return String.format(
-                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s\nCharacteristics:\n%s",
-                vehicle.getBrand(),
-                vehicle.getModel(),
-                vehicle.getVehicleType(),
-                vehicle.getPrice(),
-                vehicle.getReleaseYear(),
-                vehicle.getStatus(),
-                characteristics
-        );
+        return "Vehicle Details:\n" + vehicleDetails;
     }
+
 
     @Override
     public String getVehiclesByType(String vehicleType) {
@@ -77,19 +77,31 @@ public class VehicleController implements IVehicleController {
             return "No vehicles found for the type: " + vehicleType;
         }
 
-        StringBuilder sb = new StringBuilder("Vehicles of type " + vehicleType + ":\n");
+        String format = "| %-4s | %-10s | %-12s | %-10s | %-6s | %-10s |%n";
+        String separator = "+----+------------+--------------+------------+------+------------+%n";
+
+        StringBuilder table = new StringBuilder();
+        table.append(String.format("Vehicles of type %s:\n", vehicleType));
+        table.append(String.format(separator));
+        table.append(String.format(format, "ID", "Brand", "Model", "Price", "Year", "Status"));
+        table.append(String.format(separator));
+
         for (Vehicle vehicle : vehicles) {
-            sb.append(String.format(
-                    "ID: %d, Brand: %s, Model: %s, Price: %.2f, Status: %s\n",
+            table.append(String.format(format,
                     vehicle.getId(),
                     vehicle.getBrand(),
                     vehicle.getModel(),
-                    vehicle.getPrice(),
+                    String.format("%.2f", vehicle.getPrice()),
+                    vehicle.getReleaseYear(),
                     vehicle.getStatus()
             ));
         }
-        return sb.toString();
+
+        table.append(String.format(separator));
+
+        return table.toString();
     }
+
 
     @Override
     public String getVehiclesByBrand(String brand) {
@@ -98,19 +110,31 @@ public class VehicleController implements IVehicleController {
             return "No vehicles found for the brand: " + brand;
         }
 
-        StringBuilder sb = new StringBuilder("Vehicles of brand " + brand + ":\n");
+        String format = "| %-4s | %-12s | %-10s | %-10s | %-6s | %-10s |%n";
+        String separator = "+----+--------------+------------+------------+------+------------+%n";
+
+        StringBuilder table = new StringBuilder();
+        table.append(String.format("Vehicles of brand %s:\n", brand));
+        table.append(String.format(separator));
+        table.append(String.format(format, "ID", "Model", "Type", "Price", "Year", "Status"));
+        table.append(String.format(separator));
+
         for (Vehicle vehicle : vehicles) {
-            sb.append(String.format(
-                    "ID: %d, Model: %s, Type: %s, Price: %.2f, Status: %s\n",
+            table.append(String.format(format,
                     vehicle.getId(),
                     vehicle.getModel(),
                     vehicle.getVehicleType(),
-                    vehicle.getPrice(),
+                    String.format("%.2f", vehicle.getPrice()),
+                    vehicle.getReleaseYear(),
                     vehicle.getStatus()
             ));
         }
-        return sb.toString();
+
+        table.append(String.format(separator));
+
+        return table.toString();
     }
+
 
     @Override
     public String getVehicleStatus(int vehicleId) {
@@ -127,32 +151,18 @@ public class VehicleController implements IVehicleController {
 
     @Override
     public String getVehicleById(int vehicleId) {
-        System.out.println("Fetching vehicle details including characteristics...");
         if (!Validator.isPositiveInteger(vehicleId)) {
             return "Error: Vehicle ID must be a positive number.";
         }
 
-        Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        if (vehicle == null) {
+        String vehicleDetails = vehicleRepository.getVehicleDetailsById(vehicleId);
+        if (vehicleDetails.equals("Vehicle not found.")) {
             return "Vehicle not found.";
         }
 
-        String characteristics = vehicleRepository.getVehicleDetailsById(vehicleId);
-        if (characteristics.equals("Vehicle not found.")) {
-            characteristics = "No additional characteristics available.";
-        }
-
-        return String.format(
-                "Vehicle Details:\n- Brand: %s\n- Model: %s\n- Type: %s\n- Price: %.2f\n- Release Year: %d\n- Status: %s\n%s",
-                vehicle.getBrand(),
-                vehicle.getModel(),
-                vehicle.getVehicleType(),
-                vehicle.getPrice(),
-                vehicle.getReleaseYear(),
-                vehicle.getStatus(),
-                characteristics
-        );
+        return vehicleDetails;
     }
+
 
     @Override
     public String purchaseVehicle(int vehicleId, int userId) {
@@ -164,7 +174,7 @@ public class VehicleController implements IVehicleController {
         }
 
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        User user = adminController.getUserById(userId); // Теперь используем adminController
+        User user = adminController.getUserById(userId);
 
         if (vehicle == null) return "Vehicle not found.";
         if (user == null) return "User not found.";
@@ -194,7 +204,7 @@ public class VehicleController implements IVehicleController {
         }
 
         Vehicle vehicle = vehicleRepository.getVehicleById(vehicleId);
-        User user = adminController.getUserById(userId); // Теперь используем adminController
+        User user = adminController.getUserById(userId);
 
         if (vehicle == null) return "Vehicle not found.";
         if (user == null) return "User not found.";

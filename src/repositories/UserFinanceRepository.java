@@ -46,6 +46,6 @@ public class UserFinanceRepository implements IUserFinanceRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1; // Если пользователь не найден
+        return -1;
     }
 }
